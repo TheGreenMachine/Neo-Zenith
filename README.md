@@ -1,3 +1,3 @@
-# 1816-Project-Template
+# Neo Zenith
 
-Template for FRC Robot Projects in IntelliJ with GradleRIO
+2018 Summer Project: recode Zenith from scratch as a demo-ready robot with failsafe functions using 2018 drivers and libraries
