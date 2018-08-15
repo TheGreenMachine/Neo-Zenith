@@ -6,20 +6,18 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Collector extends Subsystem {
     private TalonSRX collector;
-    private double velocity;
 
     public Collector(int collector, double velocity){
         super();
         this.collector = new TalonSRX(collector);
     }
 
-    public void setCollector(){
+    public void setCollector(double velocity){
         this.collector.set(ControlMode.Velocity, velocity);
     }
 
 
     @Override
     protected void initDefaultCommand() {
-
     }
 }
