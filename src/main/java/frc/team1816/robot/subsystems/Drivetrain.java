@@ -41,7 +41,6 @@ public class Drivetrain extends Subsystem {
     public void setDrivetrain(double leftPower, double rightPower){
         this.leftPower = leftPower;
         this.rightPower = rightPower;
-
         update();
     }
 
@@ -49,7 +48,6 @@ public class Drivetrain extends Subsystem {
         this.leftMain.set(ControlMode.Velocity, leftPower);
         this.rightMain.set(ControlMode.Velocity, rightPower);
     }
-
 
     @Override
     protected void initDefaultCommand() { }

@@ -5,7 +5,7 @@ import frc.team1816.robot.subsystems.Drivetrain;
 public class Components {
     private static Components instance;
 
-    private Drivetrain drivetrain;
+    public Drivetrain drivetrain;
 
     //Drivetrain Talon Id's
     private final int LEFT_MAIN = 1;
