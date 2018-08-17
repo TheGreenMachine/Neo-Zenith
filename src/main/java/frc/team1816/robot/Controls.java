@@ -13,7 +13,7 @@ import java.util.List;
 public class Controls {
     private static Controls instance;
 
-    public Gamepad gamepadDriver, gamepadOperator;
+    public Gamepad gamepadDriver, gamepadOverride;
 
     public Controls() {
         List<GamepadFilter> gamepadFilters = new ArrayList<>();
@@ -22,7 +22,8 @@ public class Controls {
         GamepadFilterSet gamepadDriverFilterSet = new GamepadFilterSet(gamepadFilters);
 
         gamepadDriver = new FilteredGamepad(0,gamepadDriverFilterSet);
-        gamepadOperator = new Gamepad(1);
+        gamepadOverride = new Gamepad(1);
+
     }
 
     public static Controls getInstance(){

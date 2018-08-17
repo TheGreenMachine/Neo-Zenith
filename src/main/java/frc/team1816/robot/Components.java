@@ -1,11 +1,17 @@
 package frc.team1816.robot;
 
+import frc.team1816.robot.subsystems.Arm;
 import frc.team1816.robot.subsystems.Drivetrain;
+import frc.team1816.robot.subsystems.Intake;
+import frc.team1816.robot.subsystems.Shooter;
 
 public class Components {
     private static Components instance;
 
     public Drivetrain drivetrain;
+    public Shooter shooter;
+    public Arm arm;
+    public Intake intake;
 
     //Drivetrain Talon Id's
     private final int LEFT_MAIN = 1;
@@ -15,14 +21,28 @@ public class Components {
     private final int RIGHT_SLAVE_ONE = 6;
     private final int RIGHT_SLAVE_TWO = 7;
 
-    //Arm and Collector
-    private final int ARM = 4;
-    private final int COLLECTOR = 8;
+    //Arm and Intake
+    private final int ARM_TALON = 4;
+    private final int ANALOG_POTENTIOMETER_ID = 0;
+    private final int INTAKE_TALON = 8;
+
+    //Shooter Constants
+    private final int PCM_ID = 10;
+    private final int SOLENOID_ID_1 = 1; //Correct Id's after demo
+    private final int SOLENOID_ID_2 = 2; //Correct Id's after demo
+
+    //Mode Constants
+    public final double ARM_SPEED_DEMO = 0.5;
+    public final double ARM_SPEED_REG = 0.75;
+
+    public final double INTAKE_SPEED = 1;
 
     public Components(){
-        drivetrain = new Drivetrain(LEFT_MAIN, LEFT_SLAVE_ONE, LEFT_SLAVE_TWO, RIGHT_MAIN, RIGHT_SLAVE_ONE,
+        this.drivetrain = new Drivetrain(LEFT_MAIN, LEFT_SLAVE_ONE, LEFT_SLAVE_TWO, RIGHT_MAIN, RIGHT_SLAVE_ONE,
                 RIGHT_SLAVE_TWO);
-        
+        this.shooter = new Shooter(PCM_ID, SOLENOID_ID_1, SOLENOID_ID_2);
+        this.arm = new Arm(ARM_TALON, ANALOG_POTENTIOMETER_ID);
+        this.intake = new Intake(INTAKE_TALON);
     }
 
     public static Components getInstance(){

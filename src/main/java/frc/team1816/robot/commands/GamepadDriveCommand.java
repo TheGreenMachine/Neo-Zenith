@@ -8,8 +8,8 @@ import frc.team1816.robot.subsystems.Drivetrain;
 import static com.edinarobotics.utils.math.Math1816.coerceValue;
 
 public class GamepadDriveCommand extends Command {
-    public Drivetrain drivetrain;
-    public Gamepad gamepadDriver;
+    private Drivetrain drivetrain;
+    private Gamepad gamepadDriver;
 
     public GamepadDriveCommand(Gamepad gamepadDriver){
         super("gamepaddrivecommand");
