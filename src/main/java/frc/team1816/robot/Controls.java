@@ -22,7 +22,7 @@ public class Controls {
         GamepadFilterSet gamepadDriverFilterSet = new GamepadFilterSet(gamepadFilters);
 
         gamepadDriver = new FilteredGamepad(0,gamepadDriverFilterSet);
-        gamepadOverride = new Gamepad(1);
+        gamepadOverride = new FilteredGamepad(1, gamepadDriverFilterSet);
 
     }
 
