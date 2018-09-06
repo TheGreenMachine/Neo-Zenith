@@ -21,10 +21,6 @@ deploy {
             targets << "roborio"
         }
     }
-    fileCollectionArtifact("properties"){
-        files = fileTree( dir: "properties")
-        targets << "roborio"
-    }
 }
 
 // Defining my dependencies. In this case, WPILib (+ friends), CTRE Phoenix (Talon SRX)
