@@ -1,7 +1,7 @@
 package frc.team1816.robot;
 
 import com.edinarobotics.utils.gamepad.Gamepad;
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.team1816.robot.commands.GamepadArmCommand;
 import frc.team1816.robot.commands.GamepadDriveCommand;
@@ -12,7 +12,7 @@ import frc.team1816.robot.subsystems.Drivetrain;
 import frc.team1816.robot.subsystems.Intake;
 import frc.team1816.robot.subsystems.Shooter;
 
-public class Robot extends IterativeRobot {
+public class Robot extends TimedRobot {
 
     private Drivetrain drivetrain;
     private Arm arm;

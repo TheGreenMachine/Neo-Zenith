@@ -12,10 +12,9 @@ public class Intake extends Subsystem {
         this.collector = new TalonSRX(collector);
     }
 
-    public void setIntake(double velocity){
-        this.collector.set(ControlMode.Velocity, velocity);
+    public void setIntake(double power){
+        this.collector.set(ControlMode.PercentOutput, power);
     }
-
 
     @Override
     protected void initDefaultCommand() {

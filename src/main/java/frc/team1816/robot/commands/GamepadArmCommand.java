@@ -7,11 +7,11 @@ import frc.team1816.robot.subsystems.Arm;
 
 public class GamepadArmCommand extends Command {
     private Arm arm;
-    private double power = Components.getInstance().ARM_SPEED_DEMO;
+    private double power = 0.5;
     private Gamepad gamepad;
 
     public GamepadArmCommand(Gamepad gamepad){
-        super("raisearmcommand");
+        super("gamepadarmcommand");
         this.arm = Components.getInstance().arm;
         this.gamepad = gamepad;
 

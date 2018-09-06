@@ -18,7 +18,7 @@ public class Controls {
     public Controls() {
         List<GamepadFilter> gamepadFilters = new ArrayList<>();
         gamepadFilters.add(new DeadzoneFilter(0.05));
-        gamepadFilters.add(new PowerFilter(1)); //Linear filter for demo
+        gamepadFilters.add(new PowerFilter(2));
         GamepadFilterSet gamepadDriverFilterSet = new GamepadFilterSet(gamepadFilters);
 
         gamepadDriver = new FilteredGamepad(0,gamepadDriverFilterSet);

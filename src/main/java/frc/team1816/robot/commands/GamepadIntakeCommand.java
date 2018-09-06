@@ -8,10 +8,10 @@ import frc.team1816.robot.subsystems.Intake;
 public class GamepadIntakeCommand extends Command {
     private Intake intake;
     private Gamepad gamepad;
-    private double velocity = Components.getInstance().INTAKE_SPEED;
+    private double velocity = 1;
 
     public GamepadIntakeCommand(Gamepad gamepad){
-        super("collectballcommand");
+        super("gamepadintakecommand");
         this.intake = Components.getInstance().intake;
         this.gamepad = gamepad;
         this.velocity = velocity;

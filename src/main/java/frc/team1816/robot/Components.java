@@ -28,14 +28,13 @@ public class Components {
 
     //Shooter Constants
     private final int PCM_ID = 10;
-    private final int SOLENOID_ID_1 = 1; //Correct Id's after demo
-    private final int SOLENOID_ID_2 = 2; //Correct Id's after demo
+    private final int SOLENOID_ID_1 = 1;
+    private final int SOLENOID_ID_2 = 2;
 
     //Mode Constants
-    public final double ARM_SPEED_DEMO = 0.5;
-    public final double ARM_SPEED_REG = 0.75;
-
-    public final double INTAKE_SPEED = 1;
+//    public final double ARM_SPEED = 0.5;
+//
+//    public final double INTAKE_SPEED = 1;
 
     public Components(){
         this.drivetrain = new Drivetrain(LEFT_MAIN, LEFT_SLAVE_ONE, LEFT_SLAVE_TWO, RIGHT_MAIN, RIGHT_SLAVE_ONE,

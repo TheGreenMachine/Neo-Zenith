@@ -18,8 +18,8 @@ public class Shooter extends Subsystem {
         Timer.delay(0.5);
         this.solenoid.set(DoubleSolenoid.Value.kForward);
         Timer.delay(0.5);
-        this.solenoid.set(DoubleSolenoid.Value.kReverse);
-        Timer.delay(0.5);
+//        this.solenoid.set(DoubleSolenoid.Value.kReverse);
+//        Timer.delay(0.5);
         this.solenoid.set(DoubleSolenoid.Value.kOff);
     }
 

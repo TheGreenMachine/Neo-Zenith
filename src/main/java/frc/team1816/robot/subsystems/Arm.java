@@ -28,6 +28,10 @@ public class Arm extends Subsystem {
         this.armTalon.set(ControlMode.PercentOutput, armSpeed);
     }
 
+    public double getArmPos() {
+        return potentiometer.get();
+    }
+
 
     @Override
     protected void initDefaultCommand() { }

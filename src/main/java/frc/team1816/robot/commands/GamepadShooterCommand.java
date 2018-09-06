@@ -9,7 +9,7 @@ public class GamepadShooterCommand extends Command {
     private Shooter shooter;
 
     public GamepadShooterCommand(){
-        super("shootballcommand");
+        super("gamepadshootercommand");
         this.shooter = Components.getInstance().shooter;
         requires(shooter);
     }
