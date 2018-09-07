@@ -26,9 +26,10 @@ public class GamepadDriveCommand extends Command {
     protected void execute() {
         double speed = gamepadDriver.getLeftY();
         double turn = gamepadDriver.getRightX();
+        System.out.println("Gamepad LeftY " + gamepadDriver.getLeftY() + " RightX " + gamepadDriver.getRightX());
         double leftPower = coerceValue(1, -1, speed + turn);
         double rightPower = coerceValue(1, -1, speed - turn);
-
+        System.out.println("Left Power: " + leftPower + " Right Power: " + rightPower);
         drivetrain.setDrivetrain(leftPower, rightPower);
     }
 

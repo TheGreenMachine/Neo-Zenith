@@ -47,8 +47,8 @@ public class Drivetrain extends Subsystem {
     }
 
     public void update(){
-        this.leftMain.set(ControlMode.Velocity, leftPower);
-        this.rightMain.set(ControlMode.Velocity, rightPower);
+        this.leftMain.set(ControlMode.PercentOutput, leftPower);
+        this.rightMain.set(ControlMode.PercentOutput, rightPower);
     }
 
     @Override

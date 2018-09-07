@@ -8,7 +8,7 @@ import frc.team1816.robot.subsystems.Shooter;
 public class GamepadShooterCommand extends Command {
     private Shooter shooter;
 
-    public GamepadShooterCommand(){
+    public GamepadShooterCommand(Gamepad gamepad){
         super("gamepadshootercommand");
         this.shooter = Components.getInstance().shooter;
         requires(shooter);
