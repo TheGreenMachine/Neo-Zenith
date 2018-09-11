@@ -3,6 +3,7 @@ package frc.team1816.robot.commands;
 import com.edinarobotics.utils.gamepad.Gamepad;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team1816.robot.Components;
+import frc.team1816.robot.Controls;
 import frc.team1816.robot.subsystems.Intake;
 
 public class GamepadIntakeCommand extends Command {
@@ -10,11 +11,10 @@ public class GamepadIntakeCommand extends Command {
     private Gamepad gamepad;
     private double velocity = 1;
 
-    public GamepadIntakeCommand(Gamepad gamepad){
+    public GamepadIntakeCommand(){
         super("gamepadintakecommand");
         this.intake = Components.getInstance().intake;
-        this.gamepad = gamepad;
-        this.velocity = velocity;
+        this.gamepad = Controls.getInstance().gamepadDriver;
         requires(intake);
     }
 

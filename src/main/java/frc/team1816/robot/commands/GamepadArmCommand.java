@@ -3,6 +3,7 @@ package frc.team1816.robot.commands;
 import com.edinarobotics.utils.gamepad.Gamepad;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team1816.robot.Components;
+import frc.team1816.robot.Controls;
 import frc.team1816.robot.subsystems.Arm;
 
 public class GamepadArmCommand extends Command {
@@ -10,10 +11,10 @@ public class GamepadArmCommand extends Command {
     private double power = 0.5;
     private Gamepad gamepad;
 
-    public GamepadArmCommand(Gamepad gamepad){
+    public GamepadArmCommand(){
         super("gamepadarmcommand");
         this.arm = Components.getInstance().arm;
-        this.gamepad = gamepad;
+        this.gamepad = Controls.getInstance().gamepadDriver;
 
         requires(arm);
     }

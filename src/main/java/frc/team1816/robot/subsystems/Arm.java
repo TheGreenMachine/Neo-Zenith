@@ -12,7 +12,6 @@ public class Arm extends Subsystem {
     private double armSpeed;
     private final double threshold = 0; //Recalibrate the pot and find correct value
 
-    //failsafe options
     private AnalogPotentiometer potentiometer;
 
     public Arm(int armTalon, int potentiometer){
@@ -25,7 +24,7 @@ public class Arm extends Subsystem {
 
     public void setArm(double armSpeed){
         this.armSpeed = armSpeed * 0.75;
-        this.armTalon.set(ControlMode.PercentOutput, armSpeed);
+        this.armTalon.set(ControlMode.PercentOutput, this.armSpeed);
     }
 
     public double getArmPos() {
