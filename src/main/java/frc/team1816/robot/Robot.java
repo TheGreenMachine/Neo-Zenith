@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
         drivetrain.setDefaultCommand(new GamepadDriveCommand(gamepadDriver));
         arm.setDefaultCommand(new GamepadArmCommand(gamepadDriver));
         intake.setDefaultCommand(new GamepadIntakeCommand(gamepadDriver));
-        //shooter.setDefaultCommand(new GamepadShooterCommand());
+        shooter.setDefaultCommand(new GamepadShooterCommand(gamepadDriver));
     }
 
     @Override

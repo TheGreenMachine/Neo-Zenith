@@ -28,8 +28,8 @@ public class Components {
 
     //Shooter Constants
     private final int PCM_ID = 10;
-    private final int SOLENOID_ID_1 = 1;
-    private final int SOLENOID_ID_2 = 2;
+    private final int SOLENOID_ID_1 = 2;
+    private final int SOLENOID_ID_2 = 3;
 
     //Mode Constants
 //    public final double ARM_SPEED = 0.5;

@@ -7,10 +7,12 @@ import frc.team1816.robot.subsystems.Shooter;
 
 public class GamepadShooterCommand extends Command {
     private Shooter shooter;
+    private Gamepad gamepad;
 
     public GamepadShooterCommand(Gamepad gamepad){
         super("gamepadshootercommand");
         this.shooter = Components.getInstance().shooter;
+        this.gamepad = gamepad;
         requires(shooter);
     }
 
@@ -20,7 +22,9 @@ public class GamepadShooterCommand extends Command {
 
     @Override
     protected void execute() {
-        shooter.shoot();
+        if (gamepad.diamondDown().get()) {
+            shooter.shoot();
+        }
     }
 
     @Override

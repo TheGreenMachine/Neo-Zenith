@@ -30,7 +30,7 @@ public class GamepadDriveCommand extends Command {
         double leftPower = coerceValue(1, -1, speed + turn);
         double rightPower = coerceValue(1, -1, speed - turn);
         System.out.println("Left Power: " + leftPower + " Right Power: " + rightPower);
-        drivetrain.setDrivetrain(leftPower, rightPower);
+        drivetrain.setDrivetrain(0.3*leftPower, 0.3*rightPower);
     }
 
     @Override
