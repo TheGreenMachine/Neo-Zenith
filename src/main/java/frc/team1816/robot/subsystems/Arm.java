@@ -23,7 +23,11 @@ public class Arm extends Subsystem {
     }
 
     public void setArm(double armSpeed){
-        this.armSpeed = armSpeed * 0.75;
+        if ((getArmPos() < 0.164) || (getArmPos() > 0.363)){
+            this.armSpeed = 0;
+        } else {
+            this.armSpeed = armSpeed;
+        }
         this.armTalon.set(ControlMode.PercentOutput, this.armSpeed);
     }
 
