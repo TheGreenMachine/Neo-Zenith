@@ -41,6 +41,7 @@ public class GamepadDriveCommand extends Command {
 
     @Override
     protected void end() {
+        this.drivetrain.setDrivetrain(0,0);
     }
 
     @Override
