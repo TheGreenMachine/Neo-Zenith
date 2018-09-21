@@ -10,7 +10,8 @@ public class Arm extends Subsystem {
     private TalonSRX armTalon;
 
     private double armSpeed;
-    private final double threshold = 0; //Recalibrate the pot and find correct value
+    private final double LOWER_THRESHOLD = 0.164;
+    private final double UPPER_THRESHOLD = 0.363;
 
     private AnalogPotentiometer potentiometer;
 
@@ -23,7 +24,7 @@ public class Arm extends Subsystem {
     }
 
     public void setArm(double armSpeed){
-        if ((getArmPos() < 0.164) || (getArmPos() > 0.363)){
+        if (((getArmPos() < LOWER_THRESHOLD) && (armSpeed < 0)) || ((getArmPos() > UPPER_THRESHOLD) && (armSpeed > 0))){
             this.armSpeed = 0;
         } else {
             this.armSpeed = armSpeed;
