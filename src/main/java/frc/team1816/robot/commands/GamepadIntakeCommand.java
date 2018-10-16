@@ -9,7 +9,7 @@ import frc.team1816.robot.subsystems.Intake;
 public class GamepadIntakeCommand extends Command {
     private Intake intake;
     private Gamepad gamepad;
-    private double velocity = 1;
+    private double velocity = 0.5;
 
     public GamepadIntakeCommand(){
         super("gamepadintakecommand");
