@@ -6,10 +6,6 @@ import frc.team1816.robot.Components;
 import frc.team1816.robot.Controls;
 import frc.team1816.robot.subsystems.Drivetrain;
 
-import static com.edinarobotics.utils.math.Math1816.coerceValue;
-
-import java.util.ResourceBundle.Control;
-
 public class GamepadDriveCommand extends Command {
     private Drivetrain drivetrain;
     private Gamepad gamepad;
