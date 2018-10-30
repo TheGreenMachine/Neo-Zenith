@@ -13,7 +13,7 @@ import java.util.List;
 public class Controls {
     private static Controls instance;
 
-    public Gamepad gamepadDriver, gamepadOverride;
+    public Gamepad gamepadDriver;
 
     public Controls() {
         List<GamepadFilter> gamepadFilters = new ArrayList<>();
@@ -22,7 +22,6 @@ public class Controls {
         GamepadFilterSet gamepadDriverFilterSet = new GamepadFilterSet(gamepadFilters);
 
         gamepadDriver = new FilteredGamepad(0,gamepadDriverFilterSet);
-        //gamepadOverride = new FilteredGamepad(1, gamepadDriverFilterSet);
 
     }
 
@@ -31,5 +30,17 @@ public class Controls {
             instance = new Controls();
         }
         return instance;
+    }
+
+    public double getDriveSpeed() {
+        return gamepadDriver.getLeftY();
+    }
+
+    public double getDriveTurn() {
+        return gamepadDriver.getRightX();
+    }
+
+    public boolean isShoot() {
+        return gamepadDriver.diamondDown().get();
     }
 }

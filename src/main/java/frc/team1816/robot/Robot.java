@@ -19,7 +19,6 @@ public class Robot extends TimedRobot {
     private Intake intake;
     private Shooter shooter;
 
-    private Gamepad gamepadDriver, gamepadOverride;
 
     @Override
     public void robotInit() {
@@ -31,8 +30,6 @@ public class Robot extends TimedRobot {
         intake = Components.getInstance().intake;
         shooter = Components.getInstance().shooter;
 
-        gamepadDriver = Controls.getInstance().gamepadDriver;
-        gamepadOverride = Controls.getInstance().gamepadOverride;
     }
 
     @Override
@@ -43,10 +40,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        drivetrain.setDefaultCommand(new GamepadDriveCommand(gamepadDriver));
-        arm.setDefaultCommand(new GamepadArmCommand(gamepadDriver));
-        intake.setDefaultCommand(new GamepadIntakeCommand(gamepadDriver));
-        shooter.setDefaultCommand(new GamepadShooterCommand(gamepadDriver));
+        drivetrain.setDefaultCommand(new GamepadDriveCommand());
+        arm.setDefaultCommand(new GamepadArmCommand());
+        intake.setDefaultCommand(new GamepadIntakeCommand());
+        shooter.setDefaultCommand(new GamepadShooterCommand());
     }
 
     @Override
@@ -61,6 +58,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        System.out.println("Potentiometer: " + arm.getArmPos());
         Scheduler.getInstance().run();
     }
 
