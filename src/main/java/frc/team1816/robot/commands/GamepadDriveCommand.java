@@ -1,5 +1,6 @@
 package frc.team1816.robot.commands;
 
+import com.edinarobotics.utils.math.Math1816;
 import com.edinarobotics.utils.gamepad.Gamepad;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team1816.robot.Components;
@@ -28,8 +29,8 @@ public class GamepadDriveCommand extends Command {
 
         System.out.println("Gamepad LeftY " + gamepad.getLeftY() + " RightX " + gamepad.getRightX());
 
-        double leftPower = coerceValue(1, -1, speed + turn);
-        double rightPower = coerceValue(1, -1, speed - turn);
+        double leftPower = Math1816.coerceValue(1, -1, speed + turn);
+        double rightPower = Math1816.coerceValue(1, -1, speed - turn);
         
         System.out.println("Left Power: " + leftPower + " Right Power: " + rightPower);
 
