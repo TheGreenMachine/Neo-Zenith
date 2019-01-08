@@ -1,6 +1,5 @@
 package frc.team1816.robot;
 
-import com.edinarobotics.utils.gamepad.Gamepad;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.team1816.robot.commands.GamepadArmCommand;
