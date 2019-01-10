@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        System.out.println("Potentiometer: " + arm.getArmPos());
+        //System.out.println("Potentiometer: " + arm.getArmPos());
         Scheduler.getInstance().run();
     }
 

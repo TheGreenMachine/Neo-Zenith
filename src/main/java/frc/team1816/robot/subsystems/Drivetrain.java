@@ -86,6 +86,8 @@ public class Drivetrain extends Subsystem {
     }
 
     public void update(){
+        System.out.println("Left Velocity: " + this.leftMain.getSelectedSensorVelocity() + 
+                            " Right Velocity: " + this.rightMain.getSelectedSensorVelocity());
         this.leftMain.set(ControlMode.PercentOutput, leftPower);
         this.rightMain.set(ControlMode.PercentOutput, rightPower);
     }
