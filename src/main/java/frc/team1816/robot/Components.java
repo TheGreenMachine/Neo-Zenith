@@ -14,11 +14,11 @@ public class Components {
     public Intake intake;
 
     //Drivetrain Talon Id's
-    private final int LEFT_MAIN = 1;
-    private final int LEFT_SLAVE_ONE = 2;
+    private final int LEFT_MAIN = 2;
+    private final int LEFT_SLAVE_ONE = 1;
     private final int LEFT_SLAVE_TWO = 3;
-    private final int RIGHT_MAIN = 5;
-    private final int RIGHT_SLAVE_ONE = 6;
+    private final int RIGHT_MAIN = 6;
+    private final int RIGHT_SLAVE_ONE = 5;
     private final int RIGHT_SLAVE_TWO = 7;
 
     //Arm and Intake

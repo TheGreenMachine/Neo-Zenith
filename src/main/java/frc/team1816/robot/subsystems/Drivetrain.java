@@ -1,23 +1,31 @@
 package frc.team1816.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
+import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
+
+import java.beans.BeanDescriptor;
+import java.beans.PropertyDescriptor;
+import java.util.Enumeration;
 
 public class Drivetrain extends Subsystem {
     private TalonSRX leftMain, leftSlaveOne, leftSlaveTwo, rightMain, rightSlaveOne, rightSlaveTwo;
 
     private double leftPower, rightPower = 0;
-    private double kP, kI, kD, kF;
+    private static double kP = 0.4;
+    private static double kI = 0.0;
+    private static double kD = 0.0;
+//    private static double kF = 0.646;
+    private static double kF = 0.146;
+    private static int izone = 0;
+
+    double lastLeftPower;
+    double lastRightPower;
 
     public Drivetrain(int leftMain, int leftSlaveOne, int leftSlaveTwo, int rightMain, int rightSlaveOne,
                       int rightSlaveTwo) {
         super();
 
-        kP = 0.146;
         this.leftMain = new TalonSRX(leftMain);
         this.leftSlaveOne = new TalonSRX(leftSlaveOne);
         this.leftSlaveTwo = new TalonSRX(leftSlaveTwo);
@@ -61,13 +69,13 @@ public class Drivetrain extends Subsystem {
         this.leftMain.config_kI(0, kI, 20);
         this.leftMain.config_kD(0, kD, 20);
         this.leftMain.config_kF(0, kF, 20);
-//        this.leftMain.config_IntegralZone(0, izone, 20);
+        this.leftMain.config_IntegralZone(0, izone, 20);
 
         this.rightMain.config_kP(0, kP, 20);
         this.rightMain.config_kI(0, kI, 20);
         this.rightMain.config_kD(0, kD, 20);
         this.rightMain.config_kF(0, kF, 20);
-//        this.rightMain.config_IntegralZone(0, izone, 20);
+        this.rightMain.config_IntegralZone(0, izone, 20);
 
         this.leftMain.selectProfileSlot(0,0);
         this.rightMain.selectProfileSlot(0,0);
@@ -82,16 +90,41 @@ public class Drivetrain extends Subsystem {
     public void setDrivetrain(double leftPower, double rightPower){
         this.leftPower = leftPower;
         this.rightPower = rightPower;
-        update();
+        System.out.printf("--- leftPower=%5.2f, rightPower=%5.2f\n", leftPower, rightPower);
+        lastLeftPower = leftPower;
+        lastRightPower = rightPower;
+//        update();
     }
 
-    public void update(){
-        System.out.println("Left Velocity: " + this.leftMain.getSelectedSensorVelocity() + 
-                            " Right Velocity: " + this.rightMain.getSelectedSensorVelocity());
-        this.leftMain.set(ControlMode.PercentOutput, leftPower);
-        this.rightMain.set(ControlMode.PercentOutput, rightPower);
+    @Override
+    public void periodic() {
+        int leftVel = this.leftMain.getSelectedSensorVelocity(0);
+        int rightVel = this.rightMain.getSelectedSensorVelocity(0);
+
+        leftMain.getSensorCollection();
+
+        System.out.printf("Left Velocity: %5d,  Right Velocity: %5d\n", leftVel,  rightVel);
+        this.leftMain.set(ControlMode.Velocity, leftPower * 1023.0);
+        this.rightMain.set(ControlMode.Velocity, rightPower * 1023.0);
     }
 
     @Override
     protected void initDefaultCommand() { }
+
+    void print(SensorCollection sensorCollection) {
+
+        BeanDescriptor bean = new BeanDescriptor(SensorCollection.class);
+        Enumeration<String> names = bean.attributeNames();
+        while(names.hasMoreElements()) {
+            String name = names.nextElement();
+            try {
+                PropertyDescriptor pd = new PropertyDescriptor(name, SensorCollection.class);
+                Object obj = pd.getReadMethod().invoke(sensorCollection);
+
+                System.out.printf(" [%s=%");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
