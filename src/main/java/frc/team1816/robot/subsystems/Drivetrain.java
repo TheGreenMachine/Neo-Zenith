@@ -6,6 +6,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+
 public class Drivetrain extends Subsystem {
     private TalonSRX leftMain, leftSlaveOne, leftSlaveTwo, rightMain, rightSlaveOne, rightSlaveTwo;
     public static final int kCANTimeoutMs = 10; //use for on the fly updates
@@ -27,7 +30,7 @@ public class Drivetrain extends Subsystem {
         this.leftSlaveTwo = TalonSRXFactory.createPermanentSlaveTalon(leftSlaveTwo, leftMain);
         configureMaster(this.leftMain, true);
 
-        this.rightMain = TalonSRXFactory.createDefaultTalon((rightMain);
+        this.rightMain = TalonSRXFactory.createDefaultTalon(rightMain);
         this.rightSlaveOne = TalonSRXFactory.createPermanentSlaveTalon(rightSlaveOne, rightMain);
         this.rightSlaveTwo = TalonSRXFactory.createPermanentSlaveTalon(rightSlaveTwo, rightMain);
         configureMaster(this.leftMain, false);
@@ -87,10 +90,11 @@ public class Drivetrain extends Subsystem {
     public void setDrivetrain(double leftPower, double rightPower){
         this.leftPower = leftPower;
         this.rightPower = rightPower;
-        update();
+//        update();
     }
 
-    public void update(){
+    @Override
+    public void periodic(){
         System.out.println("Left Velocity: " + this.leftMain.getSelectedSensorVelocity(0) + 
                             " Right Velocity: " + this.rightMain.getSelectedSensorVelocity(0));
         this.leftMain.set(ControlMode.Velocity, leftPower);
@@ -138,4 +142,21 @@ public class Drivetrain extends Subsystem {
         talon.configNeutralDeadband(0.04, 0);
     }
 
+    public void showSensor(SensorCollection sensorCollection) {
+        try {
+            PropertyDescriptor[] propDescArr = Introspector
+                    .getBeanInfo(SensorCollection.class, Object.class)
+                    .getPropertyDescriptors();
+
+            for (PropertyDescriptor pd : propDescArr) {
+                String name = pd.getName();
+                Object obj = pd.getReadMethod().invoke(sensorCollection);
+//                System.out.println("  got method " + name + ", class=" + obj.getClass().getName());
+                System.out.printf(" [%s=%s]\n", name, obj.toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }

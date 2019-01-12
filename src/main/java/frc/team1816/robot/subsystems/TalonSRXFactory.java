@@ -62,7 +62,7 @@ public class TalonSRXFactory {
     }
 
     public static TalonSRX createPermanentSlaveTalon(int id, int master_id) {
-        final IMotorControllerEnhanced talon = createTalon(id, kSlaveConfiguration);
+        final TalonSRX talon = createTalon(id, kSlaveConfiguration);
         talon.set(ControlMode.Follower, master_id);
         return talon;
     }
