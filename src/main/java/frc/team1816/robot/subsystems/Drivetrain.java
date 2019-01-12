@@ -1,15 +1,17 @@
 package frc.team1816.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
+import com.ctre.phoenix.ErrorCode;
+import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 
 public class Drivetrain extends Subsystem {
     private TalonSRX leftMain, leftSlaveOne, leftSlaveTwo, rightMain, rightSlaveOne, rightSlaveTwo;
+    public static final int kCANTimeoutMs = 10; //use for on the fly updates
+    public static final int kLongCANTimeoutMs = 100; //use for constructors
+    public static final double kDriveVoltageRampRate = 0.0;
+
 
     private double leftPower, rightPower = 0;
     public double kP = 1; 
@@ -20,14 +22,15 @@ public class Drivetrain extends Subsystem {
     public Drivetrain(int leftMain, int leftSlaveOne, int leftSlaveTwo, int rightMain, int rightSlaveOne,
                       int rightSlaveTwo) {
         super();
-        this.leftMain = new TalonSRX(leftMain);
-        this.leftSlaveOne = new TalonSRX(leftSlaveOne);
-        this.leftSlaveTwo = new TalonSRX(leftSlaveTwo);
+        this.leftMain =  TalonSRXFactory.createDefaultTalon(leftMain);
+        this.leftSlaveOne = TalonSRXFactory.createPermanentSlaveTalon(leftSlaveOne, leftMain);
+        this.leftSlaveTwo = TalonSRXFactory.createPermanentSlaveTalon(leftSlaveTwo, leftMain);
+        configureMaster(this.leftMain, true);
 
-        this.rightMain = new TalonSRX(rightMain);
-        this.rightSlaveOne = new TalonSRX(rightSlaveOne);
-        this.rightSlaveTwo = new TalonSRX(rightSlaveTwo);
-
+        this.rightMain = TalonSRXFactory.createDefaultTalon((rightMain);
+        this.rightSlaveOne = TalonSRXFactory.createPermanentSlaveTalon(rightSlaveOne, rightMain);
+        this.rightSlaveTwo = TalonSRXFactory.createPermanentSlaveTalon(rightSlaveTwo, rightMain);
+        configureMaster(this.leftMain, false);
         this.leftMain.setInverted(true);
         this.leftSlaveOne.setInverted(true);
         this.leftSlaveTwo.setInverted(true);
@@ -117,4 +120,22 @@ public class Drivetrain extends Subsystem {
 
     @Override
     protected void initDefaultCommand() { }
+
+    private void configureMaster(TalonSRX talon, boolean left) {
+        talon.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 5, 100);
+        final ErrorCode sensorPresent = talon.configSelectedFeedbackSensor(FeedbackDevice
+                .CTRE_MagEncoder_Relative, 0, 100); //primary closed-loop, 100 ms timeout
+        if (sensorPresent != ErrorCode.OK) {
+            System.out.println("Could not detect " + (left ? "left" : "right") + " encoder: " + sensorPresent);
+        }
+        talon.setInverted(left);
+        talon.setSensorPhase(false);
+        talon.enableVoltageCompensation(true);
+        talon.configVoltageCompSaturation(12.0, kLongCANTimeoutMs);
+        talon.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_50Ms, kLongCANTimeoutMs);
+        talon.configVelocityMeasurementWindow(1, kLongCANTimeoutMs);
+        talon.configClosedloopRamp(kDriveVoltageRampRate, kLongCANTimeoutMs);
+        talon.configNeutralDeadband(0.04, 0);
+    }
+
 }
