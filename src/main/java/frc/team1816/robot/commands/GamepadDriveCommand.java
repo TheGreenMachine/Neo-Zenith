@@ -27,11 +27,6 @@ public class GamepadDriveCommand extends Command {
         double speed = Controls.getInstance().getDriveSpeed();
         double turn = Controls.getInstance().getDriveTurn();
 
-        if (gamepad.diamondUp().get()){
-            drivetrain.setDrivetrain(0.2, 0.2);
-            //System.out.println("Button pressed");
-        }
-
         //System.out.println("Gamepad LeftY " + gamepad.getLeftY() + " RightX " + gamepad.getRightX());
 
         double leftPower = Math1816.coerceValue(1, -1, speed + turn);
@@ -39,16 +34,16 @@ public class GamepadDriveCommand extends Command {
         
         //System.out.println("Left Power: " + leftPower + " Right Power: " + rightPower);
 
-        if (turn == 0){
-            drivetrain.setDrivetrain( leftPower,  rightPower);
-        } else if (turn !=0 ) {
-            drivetrain.setDrivetrain( leftPower,  rightPower);
+        if (gamepad.leftTrigger().get()){
+            drivetrain.setDrivetrainPercentOutput(leftPower, rightPower);
+        } else {
+            drivetrain.setDrivetrainVelocity(leftPower, rightPower);
         }
     }
 
     @Override
     protected void end() {
-        this.drivetrain.setDrivetrain(0,0);
+        this.drivetrain.setDrivetrainVelocity(0,0);
     }
 
     @Override

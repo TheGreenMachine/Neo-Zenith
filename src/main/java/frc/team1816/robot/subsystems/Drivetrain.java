@@ -15,12 +15,20 @@ public class Drivetrain extends Subsystem {
     public static final int kLongCANTimeoutMs = 100; //use for constructors
     public static final double kDriveVoltageRampRate = 0.0;
 
+    public static double TICKS_PER_REV;
+    public static double TICKS_PER_INCH;
+
+    public static double DRIVETRAIN_WIDTH;
+    public static double INCHES_PER_REV;
+    public static double MAX_VELOCITY_TICKS_PER_100MS = 8000;
 
     private double leftPower, rightPower = 0;
-    public double kP = 1; 
+    public double kP = 0; 
     public double kI = 0;
-    public double kD = 0.1;
-    public double kF = 0.146;
+    public double kD = 0;
+    public double kF = 0.1;
+
+    private boolean isPercentOutput;
 
     public Drivetrain(int leftMain, int leftSlaveOne, int leftSlaveTwo, int rightMain, int rightSlaveOne,
                       int rightSlaveTwo) {
@@ -87,18 +95,29 @@ public class Drivetrain extends Subsystem {
         this.leftMain.configVelocityMeasurementWindow(8,0);
     }
 
-    public void setDrivetrain(double leftPower, double rightPower){
+    public void setDrivetrainVelocity(double leftPower, double rightPower){
         this.leftPower = leftPower;
         this.rightPower = rightPower;
-//        update();
+        isPercentOutput = false;
+    }
+
+    public void setDrivetrainPercentOutput(double leftPower, double rightPower){
+        this.leftPower = leftPower;
+        this.rightPower = rightPower;
+        isPercentOutput = true;
     }
 
     @Override
     public void periodic(){
+        if (isPercentOutput){
+            this.leftMain.set(ControlMode.PercentOutput, leftPower);
+            this.rightMain.set(ControlMode.PercentOutput, rightPower);
+        } else {
+            this.leftMain.set(ControlMode.Velocity, MAX_VELOCITY_TICKS_PER_100MS * leftPower);
+            this.rightMain.set(ControlMode.Velocity, MAX_VELOCITY_TICKS_PER_100MS * rightPower);
+        }
         System.out.println("Left Velocity: " + this.leftMain.getSelectedSensorVelocity(0) + 
                             " Right Velocity: " + this.rightMain.getSelectedSensorVelocity(0));
-        this.leftMain.set(ControlMode.Velocity, leftPower);
-        this.rightMain.set(ControlMode.Velocity, rightPower);
     }
 
     public void setPID(double pValue, double iValue, double dValue, double fValue){
@@ -140,23 +159,5 @@ public class Drivetrain extends Subsystem {
         talon.configVelocityMeasurementWindow(1, kLongCANTimeoutMs);
         talon.configClosedloopRamp(kDriveVoltageRampRate, kLongCANTimeoutMs);
         talon.configNeutralDeadband(0.04, 0);
-    }
-
-    public void showSensor(SensorCollection sensorCollection) {
-        try {
-            PropertyDescriptor[] propDescArr = Introspector
-                    .getBeanInfo(SensorCollection.class, Object.class)
-                    .getPropertyDescriptors();
-
-            for (PropertyDescriptor pd : propDescArr) {
-                String name = pd.getName();
-                Object obj = pd.getReadMethod().invoke(sensorCollection);
-//                System.out.println("  got method " + name + ", class=" + obj.getClass().getName());
-                System.out.printf(" [%s=%s]\n", name, obj.toString());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 }
