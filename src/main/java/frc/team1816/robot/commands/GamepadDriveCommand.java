@@ -1,10 +1,12 @@
 package frc.team1816.robot.commands;
 
+import badlog.lib.BadLog;
 import com.edinarobotics.utils.math.Math1816;
 import com.edinarobotics.utils.gamepad.Gamepad;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team1816.robot.Components;
 import frc.team1816.robot.Controls;
+import frc.team1816.robot.Robot;
 import frc.team1816.robot.subsystems.Drivetrain;
 
 public class GamepadDriveCommand extends Command {
@@ -34,12 +36,17 @@ public class GamepadDriveCommand extends Command {
         
         //System.out.println("Left Power: " + leftPower + " Right Power: " + rightPower);
 
+        BadLog.publish(Robot.LOG_GAMEPAD_LEFTPOWER, leftPower);
+        BadLog.publish(Robot.LOG_GAMEPAD_RIGHTPOWER, rightPower);
+
         if (gamepad.leftTrigger().get()){
             drivetrain.setDrivetrainPercentOutput(leftPower, rightPower);
             System.out.println("Mode: PercentOutput");
+            BadLog.publish(Robot.LOG_GAMEPAD_VELOCITY_MODE, 0.0);
         } else {
             drivetrain.setDrivetrainVelocity(leftPower, rightPower);
             System.err.println("Mode: Velocity");
+            BadLog.publish(Robot.LOG_GAMEPAD_VELOCITY_MODE, 1.0);
         }
     }
 

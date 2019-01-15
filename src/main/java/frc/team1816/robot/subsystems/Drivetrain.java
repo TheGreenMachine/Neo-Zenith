@@ -1,10 +1,12 @@
 package frc.team1816.robot.subsystems;
 
+import badlog.lib.BadLog;
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
+import frc.team1816.robot.Robot;
 
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -27,6 +29,7 @@ public class Drivetrain extends Subsystem {
     public double kI = 0;
     public double kD = 0;
     public double kF = 0.1;
+    public double leftVel, rightVel;
 
     private boolean isPercentOutput;
 
@@ -108,15 +111,18 @@ public class Drivetrain extends Subsystem {
     }
 
     public double getLeftVelocity(){
-        return this.leftMain.getSelectedSensorVelocity(0);
+        return leftVel;
     }
 
     public double getRightVelocity(){
-        return this.rightMain.getSelectedSensorVelocity(0);
+        return rightVel;
     }
 
     @Override
-    public void periodic(){
+    public void periodic() {
+        leftVel = leftMain.getSelectedSensorVelocity(0);
+        rightVel = rightMain.getSelectedSensorVelocity(0);
+
         if (isPercentOutput){
             this.leftMain.set(ControlMode.PercentOutput, leftPower);
             this.rightMain.set(ControlMode.PercentOutput, rightPower);
@@ -124,8 +130,10 @@ public class Drivetrain extends Subsystem {
             this.leftMain.set(ControlMode.Velocity, MAX_VELOCITY_TICKS_PER_100MS * leftPower);
             this.rightMain.set(ControlMode.Velocity, MAX_VELOCITY_TICKS_PER_100MS * rightPower);
         }
-        System.out.println("Left Velocity: " + getLeftVelocity() + 
+        System.out.println("Left Velocity: " + getLeftVelocity() +
                             " Right Velocity: " + getRightVelocity());
+        BadLog.publish(Robot.LOG_DRIVETRAIN_LEFTVEL, leftVel);
+        BadLog.publish(Robot.LOG_DRIVETRAIN_RIGHTVEL, rightVel);
     }
 
     public void setPID(double pValue, double iValue, double dValue, double fValue){
