@@ -107,6 +107,14 @@ public class Drivetrain extends Subsystem {
         isPercentOutput = true;
     }
 
+    public double getLeftVelocity(){
+        return this.leftMain.getSelectedSensorVelocity(0);
+    }
+
+    public double getRightVelocity(){
+        return this.rightMain.getSelectedSensorVelocity(0);
+    }
+
     @Override
     public void periodic(){
         if (isPercentOutput){
@@ -116,8 +124,8 @@ public class Drivetrain extends Subsystem {
             this.leftMain.set(ControlMode.Velocity, MAX_VELOCITY_TICKS_PER_100MS * leftPower);
             this.rightMain.set(ControlMode.Velocity, MAX_VELOCITY_TICKS_PER_100MS * rightPower);
         }
-        System.out.println("Left Velocity: " + this.leftMain.getSelectedSensorVelocity(0) + 
-                            " Right Velocity: " + this.rightMain.getSelectedSensorVelocity(0));
+        System.out.println("Left Velocity: " + getLeftVelocity() + 
+                            " Right Velocity: " + getRightVelocity());
     }
 
     public void setPID(double pValue, double iValue, double dValue, double fValue){
@@ -139,6 +147,14 @@ public class Drivetrain extends Subsystem {
         this.rightMain.config_kD(0, kD, 20);
         this.rightMain.config_kF(0, kF, 20);
         //this.rightMain.config_IntegralZone(0, izone, 20);
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        super.initSendable(builder);
+        builder.addDoubleProperty("LeftVelocity", this::getLeftVelocity, null);  
+        builder.addDoubleProperty("RightVelocity", this::getRightVelocity, null);        
+      
     }
 
     @Override

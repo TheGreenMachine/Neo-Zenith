@@ -29,15 +29,17 @@ public class GamepadDriveCommand extends Command {
 
         //System.out.println("Gamepad LeftY " + gamepad.getLeftY() + " RightX " + gamepad.getRightX());
 
-        double leftPower = Math1816.coerceValue(1, -1, speed + turn);
-        double rightPower = Math1816.coerceValue(1, -1, speed - turn);
+        double leftPower = 0.5 * Math1816.coerceValue(1, -1, speed + turn);
+        double rightPower = 0.5 * Math1816.coerceValue(1, -1, speed - turn);
         
         //System.out.println("Left Power: " + leftPower + " Right Power: " + rightPower);
 
         if (gamepad.leftTrigger().get()){
             drivetrain.setDrivetrainPercentOutput(leftPower, rightPower);
+            System.out.println("Mode: PercentOutput");
         } else {
             drivetrain.setDrivetrainVelocity(leftPower, rightPower);
+            System.err.println("Mode: Velocity");
         }
     }
 
