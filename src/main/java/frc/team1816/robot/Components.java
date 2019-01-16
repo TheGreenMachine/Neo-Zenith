@@ -17,9 +17,9 @@ public class Components {
     private final int LEFT_MAIN = 2;
     private final int LEFT_SLAVE_ONE = 1;
     private final int LEFT_SLAVE_TWO = 3;
-    private final int RIGHT_MAIN = 6;
+    private final int RIGHT_MAIN = 7;
     private final int RIGHT_SLAVE_ONE = 5;
-    private final int RIGHT_SLAVE_TWO = 7;
+    private final int RIGHT_SLAVE_TWO = 6;
 
     //Arm and Intake
     private final int ARM_TALON = 4;

@@ -28,7 +28,7 @@ public class Drivetrain extends Subsystem {
     public double kP = 0; 
     public double kI = 0;
     public double kD = 0;
-    public double kF = 0.1;
+    public double kF = 0.128;
     public double leftVel, rightVel;
 
     private boolean isPercentOutput;
@@ -45,9 +45,6 @@ public class Drivetrain extends Subsystem {
         this.rightSlaveOne = TalonSRXFactory.createPermanentSlaveTalon(rightSlaveOne, rightMain);
         this.rightSlaveTwo = TalonSRXFactory.createPermanentSlaveTalon(rightSlaveTwo, rightMain);
         configureMaster(this.leftMain, false);
-        this.leftMain.setInverted(true);
-        this.leftSlaveOne.setInverted(true);
-        this.leftSlaveTwo.setInverted(true);
 
         this.leftMain.setNeutralMode(NeutralMode.Brake);
         this.leftSlaveOne.setNeutralMode(NeutralMode.Brake);
@@ -57,45 +54,10 @@ public class Drivetrain extends Subsystem {
         this.rightSlaveOne.setNeutralMode(NeutralMode.Brake);
         this.rightSlaveTwo.setNeutralMode(NeutralMode.Brake);
 
-        this.leftSlaveOne.set(ControlMode.Follower, leftMain);
-        this.leftSlaveTwo.set(ControlMode.Follower, leftMain);
-
-        this.rightSlaveOne.set(ControlMode.Follower, rightMain);
-        this.rightSlaveTwo.set(ControlMode.Follower, rightMain);
-
-        this.rightMain.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
-        this.leftMain.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
-
-        this.rightMain.configNominalOutputForward(0, 10);
-        this.rightMain.configNominalOutputReverse(0, 10);
-        this.rightMain.configPeakOutputForward(1, 10);
-        this.rightMain.configPeakOutputReverse(-1, 10);
-
-        this.leftMain.configNominalOutputForward(0, 10);
-        this.leftMain.configNominalOutputReverse(0, 10);
-        this.leftMain.configPeakOutputForward(1, 10);
-        this.leftMain.configPeakOutputReverse(-1, 10);
-
-        this.leftMain.config_kP(0, kP, 20);
-        this.leftMain.config_kI(0, kI, 20);
-        this.leftMain.config_kD(0, kD, 20);
-        this.leftMain.config_kF(0, kF, 20);
-    //    this.leftMain.config_IntegralZone(0, izone, 20);
-
-        this.rightMain.config_kP(0, kP, 20);
-        this.rightMain.config_kI(0, kI, 20);
-        this.rightMain.config_kD(0, kD, 20);
-        this.rightMain.config_kF(0, kF, 20);
-//        this.rightMain.config_IntegralZone(0, izone, 20);
+        this.setPID(kP, kI, kD, kF);
 
         this.leftMain.selectProfileSlot(0,0);
         this.rightMain.selectProfileSlot(0,0);
-
-        this.rightMain.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_20Ms,0);
-        this.leftMain.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_20Ms,0);
-
-        this.rightMain.configVelocityMeasurementWindow(8,0);
-        this.leftMain.configVelocityMeasurementWindow(8,0);
     }
 
     public void setDrivetrainVelocity(double leftPower, double rightPower){
@@ -143,7 +105,6 @@ public class Drivetrain extends Subsystem {
         this.kF = kF;
         System.out.println("PID values set");
 
-        
         this.leftMain.config_kP(0, kP, 20);
         this.leftMain.config_kI(0, kI, 20);
         this.leftMain.config_kD(0, kD, 20);
@@ -170,8 +131,7 @@ public class Drivetrain extends Subsystem {
 
     private void configureMaster(TalonSRX talon, boolean left) {
         talon.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 5, 100);
-        final ErrorCode sensorPresent = talon.configSelectedFeedbackSensor(FeedbackDevice
-                .CTRE_MagEncoder_Relative, 0, 100); //primary closed-loop, 100 ms timeout
+        final ErrorCode sensorPresent = talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 100); //primary closed-loop, 100 ms timeout
         if (sensorPresent != ErrorCode.OK) {
             System.out.println("Could not detect " + (left ? "left" : "right") + " encoder: " + sensorPresent);
         }
