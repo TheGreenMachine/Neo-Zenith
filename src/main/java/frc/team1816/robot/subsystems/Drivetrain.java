@@ -1,6 +1,7 @@
 package frc.team1816.robot.subsystems;
 
 import badlog.lib.BadLog;
+import badlog.lib.DataInferMode;
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -25,7 +26,7 @@ public class Drivetrain extends Subsystem {
     public static double MAX_VELOCITY_TICKS_PER_100MS = 8000;
 
     private double leftPower, rightPower = 0;
-    public double kP = 0; 
+    public double kP = 5.0;
     public double kI = 0;
     public double kD = 0;
     public double kF = 0.128;
@@ -60,6 +61,20 @@ public class Drivetrain extends Subsystem {
 
         this.leftMain.selectProfileSlot(0,0);
         this.rightMain.selectProfileSlot(0,0);
+
+        BadLog.createTopic(Robot.LOG_DRIVETRAIN_LEFTVEL, "NativeUnits",
+                this::getLeftVelocity, "hide", "join:Drivetrain/Velocities");
+        BadLog.createTopic(Robot.LOG_DRIVETRAIN_RIGHTVEL, "NativeUnits",
+                this::getRightVelocity, "hide", "join:Drivetrain/Velocities");
+        BadLog.createTopic(Robot.LOG_DRIVETRAIN_PID_P, BadLog.UNITLESS,
+                this::getP, "join:Drivetrain/PID", "hide");
+        BadLog.createTopic(Robot.LOG_DRIVETRAIN_PID_I, BadLog.UNITLESS,
+                this::getI,"join:Drivetrain/PID", "hide");
+        BadLog.createTopic(Robot.LOG_DRIVETRAIN_PID_D, BadLog.UNITLESS,
+                this::getD,"join:Drivetrain/PID", "hide");
+        BadLog.createTopic(Robot.LOG_DRIVETRAIN_PID_F, BadLog.UNITLESS,
+                this::getF,"join:Drivetrain/PID", "hide");
+
     }
 
     public void setDrivetrainVelocity(double leftPower, double rightPower){
@@ -135,6 +150,11 @@ public class Drivetrain extends Subsystem {
 
     @Override
     protected void initDefaultCommand() { }
+
+    double getP() { return kP; }
+    double getI() { return kI; }
+    double getD() { return kD; }
+    double getF() { return kF; }
 
     private void configureMaster(TalonSRX talon, boolean left) {
         talon.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 5, 100);

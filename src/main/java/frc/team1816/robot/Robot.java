@@ -52,12 +52,6 @@ public class Robot extends TimedRobot {
         BadLog.createValue("StartTime", timestr);
         BadLog.createTopic("Time", "sec", () -> getElapsedTime(),
                 "xaxis", "hide");
-        BadLog.createTopicSubscriber(LOG_DRIVETRAIN_LEFTVEL, "NativeUnits", DataInferMode.DEFAULT);
-        BadLog.createTopicSubscriber(LOG_DRIVETRAIN_RIGHTVEL, "NativeUnits", DataInferMode.DEFAULT);
-        BadLog.createTopicSubscriber(LOG_DRIVETRAIN_PID_P, BadLog.UNITLESS, DataInferMode.LAST);
-        BadLog.createTopicSubscriber(LOG_DRIVETRAIN_PID_I, BadLog.UNITLESS, DataInferMode.LAST);
-        BadLog.createTopicSubscriber(LOG_DRIVETRAIN_PID_D, BadLog.UNITLESS, DataInferMode.LAST);
-        BadLog.createTopicSubscriber(LOG_DRIVETRAIN_PID_F, BadLog.UNITLESS, DataInferMode.LAST);
 
         BadLog.createTopicSubscriber(LOG_ARM_POS, "ohms", DataInferMode.DEFAULT);
 
