@@ -1,5 +1,6 @@
 package frc.team1816.robot.subsystems;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.ParamEnum;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -113,9 +114,15 @@ public class TalonSRXFactory {
 
         talon.selectProfileSlot(0, 0);
 
-        talon.configVelocityMeasurementPeriod(config.VELOCITY_MEASUREMENT_PERIOD, kTimeoutMs);
-        talon.configVelocityMeasurementWindow(config.VELOCITY_MEASUREMENT_ROLLING_AVERAGE_WINDOW,
+        ErrorCode code = talon.configVelocityMeasurementPeriod(config.VELOCITY_MEASUREMENT_PERIOD, kTimeoutMs);
+        if (code != ErrorCode.OK) {
+            System.out.println("Error setting velocity measurement period: " + code.toString());
+        }
+        code = talon.configVelocityMeasurementWindow(config.VELOCITY_MEASUREMENT_ROLLING_AVERAGE_WINDOW,
                 kTimeoutMs);
+        if (code != ErrorCode.OK) {
+            System.out.println("Error setting velocity measurement window: " + code.toString());
+        }
 
         talon.configOpenloopRamp(config.OPEN_LOOP_RAMP_RATE, kTimeoutMs);
         talon.configClosedloopRamp(config.CLOSED_LOOP_RAMP_RATE, kTimeoutMs);

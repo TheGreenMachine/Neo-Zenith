@@ -40,11 +40,13 @@ public class Drivetrain extends Subsystem {
         this.leftSlaveOne = TalonSRXFactory.createPermanentSlaveTalon(leftSlaveOne, leftMain);
         this.leftSlaveTwo = TalonSRXFactory.createPermanentSlaveTalon(leftSlaveTwo, leftMain);
         configureMaster(this.leftMain, true);
+        this.leftSlaveOne.setInverted(true);
+        this.leftSlaveTwo.setInverted(true);
 
         this.rightMain = TalonSRXFactory.createDefaultTalon(rightMain);
         this.rightSlaveOne = TalonSRXFactory.createPermanentSlaveTalon(rightSlaveOne, rightMain);
         this.rightSlaveTwo = TalonSRXFactory.createPermanentSlaveTalon(rightSlaveTwo, rightMain);
-        configureMaster(this.leftMain, false);
+        configureMaster(this.rightMain, false);
 
         this.leftMain.setNeutralMode(NeutralMode.Brake);
         this.leftSlaveOne.setNeutralMode(NeutralMode.Brake);
@@ -103,7 +105,7 @@ public class Drivetrain extends Subsystem {
         this.kI = kI;
         this.kD = kD;
         this.kF = kF;
-        System.out.println("PID values set");
+        System.out.printf("PID values set: P=%.2f, I=%.2f, D=%.2f, F=%.2f\n", kP, kI, kD, kF);
 
         this.leftMain.config_kP(0, kP, 20);
         this.leftMain.config_kI(0, kI, 20);
@@ -116,6 +118,11 @@ public class Drivetrain extends Subsystem {
         this.rightMain.config_kD(0, kD, 20);
         this.rightMain.config_kF(0, kF, 20);
         //this.rightMain.config_IntegralZone(0, izone, 20);
+
+        BadLog.publish(Robot.LOG_DRIVETRAIN_PID_P, kP);
+        BadLog.publish(Robot.LOG_DRIVETRAIN_PID_I, kI);
+        BadLog.publish(Robot.LOG_DRIVETRAIN_PID_D, kD);
+        BadLog.publish(Robot.LOG_DRIVETRAIN_PID_F, kF);
     }
 
     @Override

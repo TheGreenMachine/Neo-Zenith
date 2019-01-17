@@ -26,6 +26,10 @@ public class Robot extends TimedRobot {
     public static final String LOG_GAMEPAD_LEFTPOWER = "Gamepad/LeftPower";
     public static final String LOG_GAMEPAD_RIGHTPOWER = "Gamepad/RightPower";
     public static final String LOG_GAMEPAD_VELOCITY_MODE = "Gamepad/VelocityMode";
+    public static final String LOG_DRIVETRAIN_PID_P = "Drivetrain/PID_P";
+    public static final String LOG_DRIVETRAIN_PID_I = "Drivetrain/PID_I";
+    public static final String LOG_DRIVETRAIN_PID_D = "Drivetrain/PID_D";
+    public static final String LOG_DRIVETRAIN_PID_F = "Drivetrain/PID_F";
 
     private Drivetrain drivetrain;
     private Arm arm;
@@ -37,6 +41,34 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
+        // -- setup the log filename
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd-HHmm");
+        String timestr = fmt.format(new Date());
+        String filename = "/home/lvuser/" + timestr + ".bag";
+        System.out.println("Writing log data to file: " + filename);
+
+        // -- setup the log file
+        log = BadLog.init(filename);
+        BadLog.createValue("StartTime", timestr);
+        BadLog.createTopic("Time", "sec", () -> getElapsedTime(),
+                "xaxis", "hide");
+        BadLog.createTopicSubscriber(LOG_DRIVETRAIN_LEFTVEL, "NativeUnits", DataInferMode.DEFAULT);
+        BadLog.createTopicSubscriber(LOG_DRIVETRAIN_RIGHTVEL, "NativeUnits", DataInferMode.DEFAULT);
+        BadLog.createTopicSubscriber(LOG_DRIVETRAIN_PID_P, BadLog.UNITLESS, DataInferMode.LAST);
+        BadLog.createTopicSubscriber(LOG_DRIVETRAIN_PID_I, BadLog.UNITLESS, DataInferMode.LAST);
+        BadLog.createTopicSubscriber(LOG_DRIVETRAIN_PID_D, BadLog.UNITLESS, DataInferMode.LAST);
+        BadLog.createTopicSubscriber(LOG_DRIVETRAIN_PID_F, BadLog.UNITLESS, DataInferMode.LAST);
+
+        BadLog.createTopicSubscriber(LOG_ARM_POS, "ohms", DataInferMode.DEFAULT);
+
+        BadLog.createTopicSubscriber(LOG_GAMEPAD_LEFTPOWER, "%", DataInferMode.DEFAULT);
+        BadLog.createTopicSubscriber(LOG_GAMEPAD_RIGHTPOWER, "%", DataInferMode.DEFAULT);
+        BadLog.createTopicSubscriber(LOG_GAMEPAD_VELOCITY_MODE, "T/F", DataInferMode.DEFAULT);
+
+        log.setDoubleToStringFunction( (d) -> String.format("%.3f", d) );
+        log.finishInitialization();
+
+
         Components.getInstance();
         Controls.getInstance();
 
@@ -53,28 +85,6 @@ public class Robot extends TimedRobot {
 
         startTime = System.currentTimeMillis();
 
-        // -- setup the log filename
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd-HHmm");
-        String timestr = fmt.format(new Date());
-        String filename = "/home/lvuser/" + timestr + ".bag";
-        System.out.println("Writing log data to file: " + filename);
-
-        // -- setup the log file
-        log = BadLog.init(filename);
-        BadLog.createValue("StartTime", timestr);
-        BadLog.createTopic("Time", "sec", () -> getElapsedTime(),
-                "xaxis", "hide");
-        BadLog.createTopicSubscriber(LOG_DRIVETRAIN_LEFTVEL, "NativeUnits", DataInferMode.DEFAULT);
-        BadLog.createTopicSubscriber(LOG_DRIVETRAIN_RIGHTVEL, "NativeUnits", DataInferMode.DEFAULT);
-
-        BadLog.createTopicSubscriber(LOG_ARM_POS, "ohms", DataInferMode.DEFAULT);
-
-        BadLog.createTopicSubscriber(LOG_GAMEPAD_LEFTPOWER, "%", DataInferMode.DEFAULT);
-        BadLog.createTopicSubscriber(LOG_GAMEPAD_RIGHTPOWER, "%", DataInferMode.DEFAULT);
-        BadLog.createTopicSubscriber(LOG_GAMEPAD_VELOCITY_MODE, "T/F", DataInferMode.DEFAULT);
-
-        log.setDoubleToStringFunction( (d) -> String.format("%.3f", d) );
-        log.finishInitialization();
     }
 
     public static double getElapsedTime() {
