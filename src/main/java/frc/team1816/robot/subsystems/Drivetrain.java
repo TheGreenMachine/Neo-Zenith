@@ -68,11 +68,11 @@ public class Drivetrain extends Subsystem {
         this.rightMain.selectProfileSlot(0,0);
 
         BadLog.createTopic(Robot.LOG_DRIVETRAIN_LEFTVEL, "NativeUnits",
-                this::getLeftVelocity, "hide", "join:Drivetrain/Velocities");
+                () -> getLeftVelocity(), "hide", "join:Drivetrain/Velocities");
         BadLog.createTopic(Robot.LOG_DRIVETRAIN_RIGHTVEL, "NativeUnits",
-                this::getRightVelocity, "hide", "join:Drivetrain/Velocities");
+                () -> getRightVelocity(), "hide", "join:Drivetrain/Velocities");
         BadLog.createTopic(Robot.LOG_DRIVETRAIN_PID_P, BadLog.UNITLESS,
-                this::getP, "join:Drivetrain/PID", "hide");
+                () -> getP(), "join:Drivetrain/PID", "hide");
         BadLog.createTopic(Robot.LOG_DRIVETRAIN_PID_I, BadLog.UNITLESS,
                 this::getI,"join:Drivetrain/PID", "hide");
         BadLog.createTopic(Robot.LOG_DRIVETRAIN_PID_D, BadLog.UNITLESS,
