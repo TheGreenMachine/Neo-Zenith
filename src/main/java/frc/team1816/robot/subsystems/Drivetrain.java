@@ -34,20 +34,20 @@ public class Drivetrain extends Subsystem {
 
     private boolean isPercentOutput;
 
-    public Drivetrain(int leftMain, int leftSlaveOne, int leftSlaveTwo, int rightMain, int rightSlaveOne,
-                      int rightSlaveTwo) {
+    public Drivetrain(int leftMainID, int leftSlaveOneID, int leftSlaveTwoID, int rightMainID, int rightSlaveOneID,
+                      int rightSlaveTwoID) {
         super();
 
-        this.leftMain =  TalonSRXFactory.createDefaultTalon(leftMain);
-        this.leftSlaveOne = TalonSRXFactory.createPermanentSlaveTalon(leftSlaveOne, leftMain);
-        this.leftSlaveTwo = TalonSRXFactory.createPermanentSlaveTalon(leftSlaveTwo, leftMain);
+        this.leftMain =  TalonSRXFactory.createDefaultTalon(leftMainID);
+        this.leftSlaveOne = TalonSRXFactory.createPermanentSlaveTalon(leftSlaveOneID, leftMainID);
+        this.leftSlaveTwo = TalonSRXFactory.createPermanentSlaveTalon(leftSlaveTwoID, leftMainID);
         configureMaster(this.leftMain, true);
         this.leftSlaveOne.setInverted(true);
         this.leftSlaveTwo.setInverted(true);
 
-        this.rightMain = TalonSRXFactory.createDefaultTalon(rightMain);
-        this.rightSlaveOne = TalonSRXFactory.createPermanentSlaveTalon(rightSlaveOne, rightMain);
-        this.rightSlaveTwo = TalonSRXFactory.createPermanentSlaveTalon(rightSlaveTwo, rightMain);
+        this.rightMain = TalonSRXFactory.createDefaultTalon(rightMainID);
+        this.rightSlaveOne = TalonSRXFactory.createPermanentSlaveTalon(rightSlaveOneID, rightMainID);
+        this.rightSlaveTwo = TalonSRXFactory.createPermanentSlaveTalon(rightSlaveTwoID, rightMainID);
         configureMaster(this.rightMain, false);
 
         this.leftMain.setNeutralMode(NeutralMode.Brake);

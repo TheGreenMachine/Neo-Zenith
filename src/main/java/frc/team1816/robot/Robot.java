@@ -119,8 +119,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        System.out.println("Gyro: " + drivetrain.getGyroAngle());
-
         // update all log data
         log.updateTopics();
         // only write logs if the DriverStation is enabled
@@ -128,8 +126,8 @@ public class Robot extends TimedRobot {
             log.log();
         }
 
+        System.out.println("Gyro Angle: " + drivetrain.getGyroAngle());
         System.out.println("Potentiometer: " + arm.getArmPos());
-        System.out.println(drivetrain.getGyroAngle());
         Scheduler.getInstance().run();
     }
 
