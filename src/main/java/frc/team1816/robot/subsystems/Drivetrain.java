@@ -37,7 +37,7 @@ public class Drivetrain extends Subsystem {
     public Drivetrain(int leftMain, int leftSlaveOne, int leftSlaveTwo, int rightMain, int rightSlaveOne,
                       int rightSlaveTwo) {
         super();
-        this.gyro = new PigeonIMU(leftSlaveTwo);
+        this.gyro = new PigeonIMU(this.leftSlaveTwo);
 
         this.leftMain =  TalonSRXFactory.createDefaultTalon(leftMain);
         this.leftSlaveOne = TalonSRXFactory.createPermanentSlaveTalon(leftSlaveOne, leftMain);

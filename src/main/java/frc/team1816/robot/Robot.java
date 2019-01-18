@@ -119,7 +119,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        //System.out.println("Potentiometer: " + arm.getArmPos());
+        System.out.println("Gyro: " + drivetrain.getGyroAngle());
 
         // update all log data
         log.updateTopics();
