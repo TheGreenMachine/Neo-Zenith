@@ -127,6 +127,9 @@ public class Robot extends TimedRobot {
         if (!DriverStation.getInstance().isDisabled()) {
             log.log();
         }
+
+        System.out.println("Potentiometer: " + arm.getArmPos());
+        System.out.println(drivetrain.getGyroAngle());
         Scheduler.getInstance().run();
     }
 

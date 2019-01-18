@@ -5,6 +5,7 @@ import badlog.lib.DataInferMode;
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import frc.team1816.robot.Robot;
@@ -13,6 +14,8 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 
 public class Drivetrain extends Subsystem {
+    private PigeonIMU gyro;
+
     private TalonSRX leftMain, leftSlaveOne, leftSlaveTwo, rightMain, rightSlaveOne, rightSlaveTwo;
     public static final int kCANTimeoutMs = 10; //use for on the fly updates
     public static final int kLongCANTimeoutMs = 100; //use for constructors
@@ -37,6 +40,8 @@ public class Drivetrain extends Subsystem {
     public Drivetrain(int leftMain, int leftSlaveOne, int leftSlaveTwo, int rightMain, int rightSlaveOne,
                       int rightSlaveTwo) {
         super();
+        this.gyro = new PigeonIMU(leftSlaveTwo);
+
         this.leftMain =  TalonSRXFactory.createDefaultTalon(leftMain);
         this.leftSlaveOne = TalonSRXFactory.createPermanentSlaveTalon(leftSlaveOne, leftMain);
         this.leftSlaveTwo = TalonSRXFactory.createPermanentSlaveTalon(leftSlaveTwo, leftMain);
@@ -145,7 +150,10 @@ public class Drivetrain extends Subsystem {
         super.initSendable(builder);
         builder.addDoubleProperty("LeftVelocity", this::getLeftVelocity, null);  
         builder.addDoubleProperty("RightVelocity", this::getRightVelocity, null);        
+    }
       
+    public double getGyroAngle() {
+        return gyro.getFusedHeading();
     }
 
     @Override
