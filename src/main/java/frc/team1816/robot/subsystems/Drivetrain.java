@@ -29,7 +29,7 @@ public class Drivetrain extends Subsystem {
     public double kI = 0;
     public double kD = 0;
     public double kF = 0.128;
-    public double leftTalonVelocity, rightTalonVelocity, leftTalonPosition, rightTalonPosition;
+    private double leftTalonVelocity, rightTalonVelocity, leftTalonPosition, rightTalonPosition;
 
     private boolean isPercentOutput;
 
