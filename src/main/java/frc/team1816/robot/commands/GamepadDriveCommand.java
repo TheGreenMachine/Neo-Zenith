@@ -36,8 +36,8 @@ public class GamepadDriveCommand extends Command {
         
         //System.out.println("Left Power: " + leftPower + " Right Power: " + rightPower);
 
-        BadLog.publish(Robot.LOG_GAMEPAD_LEFTPOWER, leftPower);
-        BadLog.publish(Robot.LOG_GAMEPAD_RIGHTPOWER, rightPower);
+        BadLog.publish(Robot.LOG_GAMEPAD_LEFT_POWER, leftPower);
+        BadLog.publish(Robot.LOG_GAMEPAD_RIGHT_POWER, rightPower);
 
         if (gamepad.leftTrigger().get()){
             drivetrain.setDrivetrainPercentOutput(leftPower, rightPower);

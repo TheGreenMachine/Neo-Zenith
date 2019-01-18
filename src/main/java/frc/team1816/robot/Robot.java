@@ -20,11 +20,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Robot extends TimedRobot {
-    public static final String LOG_DRIVETRAIN_LEFTVEL = "Drivetrain/LeftVel";
-    public static final String LOG_DRIVETRAIN_RIGHTVEL = "Drivetrain/RightVel";
+    public static final String LOG_DRIVETRAIN_LEFT_VEL = "Drivetrain/LeftVel";
+    public static final String LOG_DRIVETRAIN_RIGHT_VEL = "Drivetrain/RightVel";
     public static final String LOG_ARM_POS = "Arm/Position";
-    public static final String LOG_GAMEPAD_LEFTPOWER = "Gamepad/LeftPower";
-    public static final String LOG_GAMEPAD_RIGHTPOWER = "Gamepad/RightPower";
+    public static final String LOG_GAMEPAD_LEFT_POWER = "Gamepad/LeftPower";
+    public static final String LOG_GAMEPAD_RIGHT_POWER = "Gamepad/RightPower";
     public static final String LOG_GAMEPAD_VELOCITY_MODE = "Gamepad/VelocityMode";
     public static final String LOG_DRIVETRAIN_PID_P = "Drivetrain/PID_P";
     public static final String LOG_DRIVETRAIN_PID_I = "Drivetrain/PID_I";
@@ -55,8 +55,8 @@ public class Robot extends TimedRobot {
 
         BadLog.createTopicSubscriber(LOG_ARM_POS, "ohms", DataInferMode.DEFAULT);
 
-        BadLog.createTopicSubscriber(LOG_GAMEPAD_LEFTPOWER, "%", DataInferMode.DEFAULT);
-        BadLog.createTopicSubscriber(LOG_GAMEPAD_RIGHTPOWER, "%", DataInferMode.DEFAULT);
+        BadLog.createTopicSubscriber(LOG_GAMEPAD_LEFT_POWER, "%", DataInferMode.DEFAULT);
+        BadLog.createTopicSubscriber(LOG_GAMEPAD_RIGHT_POWER, "%", DataInferMode.DEFAULT);
         BadLog.createTopicSubscriber(LOG_GAMEPAD_VELOCITY_MODE, "T/F", DataInferMode.DEFAULT);
 
         log.setDoubleToStringFunction( (d) -> String.format("%.3f", d) );

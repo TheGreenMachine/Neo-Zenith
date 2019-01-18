@@ -1,7 +1,6 @@
 package frc.team1816.robot.subsystems;
 
 import badlog.lib.BadLog;
-import badlog.lib.DataInferMode;
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -9,9 +8,6 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import frc.team1816.robot.Robot;
-
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 
 public class Drivetrain extends Subsystem {
     private PigeonIMU gyro;
@@ -67,12 +63,12 @@ public class Drivetrain extends Subsystem {
         this.leftMain.selectProfileSlot(0,0);
         this.rightMain.selectProfileSlot(0,0);
 
-        BadLog.createTopic(Robot.LOG_DRIVETRAIN_LEFTVEL, "NativeUnits",
-                () -> getLeftVelocity(), "hide", "join:Drivetrain/Velocities");
-        BadLog.createTopic(Robot.LOG_DRIVETRAIN_RIGHTVEL, "NativeUnits",
-                () -> getRightVelocity(), "hide", "join:Drivetrain/Velocities");
+        BadLog.createTopic(Robot.LOG_DRIVETRAIN_LEFT_VEL, "NativeUnits",
+                this::getLeftVelocity, "hide", "join:Drivetrain/Velocities");
+        BadLog.createTopic(Robot.LOG_DRIVETRAIN_RIGHT_VEL, "NativeUnits",
+                this::getRightVelocity, "hide", "join:Drivetrain/Velocities");
         BadLog.createTopic(Robot.LOG_DRIVETRAIN_PID_P, BadLog.UNITLESS,
-                () -> getP(), "join:Drivetrain/PID", "hide");
+                this::getP, "join:Drivetrain/PID", "hide");
         BadLog.createTopic(Robot.LOG_DRIVETRAIN_PID_I, BadLog.UNITLESS,
                 this::getI,"join:Drivetrain/PID", "hide");
         BadLog.createTopic(Robot.LOG_DRIVETRAIN_PID_D, BadLog.UNITLESS,
