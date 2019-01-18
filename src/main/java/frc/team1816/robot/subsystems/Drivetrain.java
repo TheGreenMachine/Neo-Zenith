@@ -30,7 +30,7 @@ public class Drivetrain extends Subsystem {
     public double kI = 0;
     public double kD = 0;
     public double kF = 0.128;
-    public double leftVel, rightVel;
+    public double leftTalonVelocity, rightTalonVelocity, leftTalonPosition, rightTalonPosition;
 
     private boolean isPercentOutput;
 
@@ -90,17 +90,27 @@ public class Drivetrain extends Subsystem {
     }
 
     public double getLeftVelocity(){
-        return leftVel;
+        return leftTalonVelocity;
     }
 
     public double getRightVelocity(){
-        return rightVel;
+        return rightTalonVelocity;
+    }
+
+    public double getLeftPosition(){
+        return leftTalonPosition;
+    }
+
+    public double getRightPosition(){
+        return rightTalonPosition;
     }
 
     @Override
     public void periodic() {
-        leftVel = leftMain.getSelectedSensorVelocity(0);
-        rightVel = rightMain.getSelectedSensorVelocity(0);
+        leftTalonVelocity = leftMain.getSelectedSensorVelocity(0);
+        rightTalonVelocity = rightMain.getSelectedSensorVelocity(0);
+        leftTalonPosition = leftMain.getSelectedSensorPosition(0);
+        rightTalonPosition = rightMain.getSelectedSensorPosition(0);
 
         if (isPercentOutput){
             this.leftMain.set(ControlMode.PercentOutput, leftPower);
@@ -111,8 +121,8 @@ public class Drivetrain extends Subsystem {
         }
         System.out.println("Left Velocity: " + getLeftVelocity() +
                             " Right Velocity: " + getRightVelocity());
-        BadLog.publish(Robot.LOG_DRIVETRAIN_LEFTVEL, leftVel);
-        BadLog.publish(Robot.LOG_DRIVETRAIN_RIGHTVEL, rightVel);
+        BadLog.publish(Robot.LOG_DRIVETRAIN_LEFTVEL, leftTalonVelocity);
+        BadLog.publish(Robot.LOG_DRIVETRAIN_RIGHTVEL, rightTalonVelocity);
     }
 
     public void setPID(double pValue, double iValue, double dValue, double fValue){
@@ -143,9 +153,10 @@ public class Drivetrain extends Subsystem {
     @Override
     public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
-        builder.addDoubleProperty("LeftVelocity", this::getLeftVelocity, null);  
-        builder.addDoubleProperty("RightVelocity", this::getRightVelocity, null);        
-      
+        builder.addDoubleProperty("LeftTalonVelocity", this::getLeftVelocity, null);  
+        builder.addDoubleProperty("RightTalonVelocity", this::getRightVelocity, null);        
+        builder.addDoubleProperty("LeftTalonPosition", this::getLeftPosition, null);
+        builder.addDoubleProperty("RightTalonPosition", this::getRightPosition, null);
     }
 
     @Override
