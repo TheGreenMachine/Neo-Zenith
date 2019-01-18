@@ -126,8 +126,6 @@ public class Drivetrain extends Subsystem {
         }
         System.out.println("Left Velocity: " + getLeftVelocity() +
                             " Right Velocity: " + getRightVelocity());
-        BadLog.publish(Robot.LOG_DRIVETRAIN_LEFTVEL, leftTalonVelocity);
-        BadLog.publish(Robot.LOG_DRIVETRAIN_RIGHTVEL, rightTalonVelocity);
     }
 
     public void setPID(double pValue, double iValue, double dValue, double fValue){
@@ -148,11 +146,6 @@ public class Drivetrain extends Subsystem {
         this.rightMain.config_kD(0, kD, 20);
         this.rightMain.config_kF(0, kF, 20);
         //this.rightMain.config_IntegralZone(0, izone, 20);
-
-        BadLog.publish(Robot.LOG_DRIVETRAIN_PID_P, kP);
-        BadLog.publish(Robot.LOG_DRIVETRAIN_PID_I, kI);
-        BadLog.publish(Robot.LOG_DRIVETRAIN_PID_D, kD);
-        BadLog.publish(Robot.LOG_DRIVETRAIN_PID_F, kF);
     }
 
     @Override
