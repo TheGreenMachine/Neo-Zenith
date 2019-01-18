@@ -36,7 +36,7 @@ public class Drivetrain extends Subsystem {
     public Drivetrain(int leftMain, int leftSlaveOne, int leftSlaveTwo, int rightMain, int rightSlaveOne,
                       int rightSlaveTwo) {
         super();
-        this.gyro = new PigeonIMU(leftSlaveTwo);
+        this.gyro = new PigeonIMU(this.leftSlaveTwo);
 
         this.leftMain =  TalonSRXFactory.createDefaultTalon(leftMain);
         this.leftSlaveOne = TalonSRXFactory.createPermanentSlaveTalon(leftSlaveOne, leftMain);
@@ -125,10 +125,10 @@ public class Drivetrain extends Subsystem {
     }
 
     public void setPID(double pValue, double iValue, double dValue, double fValue){
-        this.kP = kP;
-        this.kI = kI;
-        this.kD = kD;
-        this.kF = kF;
+        this.kP = pValue;
+        this.kI = iValue;
+        this.kD = dValue;
+        this.kF = fValue;
         System.out.printf("PID values set: P=%.2f, I=%.2f, D=%.2f, F=%.2f\n", kP, kI, kD, kF);
 
         this.leftMain.config_kP(0, kP, 20);
