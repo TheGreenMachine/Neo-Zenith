@@ -10,9 +10,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import frc.team1816.robot.Robot;
 
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-
 public class Drivetrain extends Subsystem {
     private PigeonIMU gyro;
 
@@ -129,10 +126,10 @@ public class Drivetrain extends Subsystem {
     }
 
     public void setPID(double pValue, double iValue, double dValue, double fValue){
-        this.kP = kP;
-        this.kI = kI;
-        this.kD = kD;
-        this.kF = kF;
+        this.kP = pValue;
+        this.kI = iValue;
+        this.kD = dValue;
+        this.kF = fValue;
         System.out.printf("PID values set: P=%.2f, I=%.2f, D=%.2f, F=%.2f\n", kP, kI, kD, kF);
 
         this.leftMain.config_kP(0, kP, 20);
