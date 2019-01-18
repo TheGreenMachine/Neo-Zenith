@@ -19,14 +19,14 @@ public class Drivetrain extends Subsystem {
     public static final double kDriveVoltageRampRate = 0.0;
 
     public static double TICKS_PER_REV;
-    public static double TICKS_PER_INCH;
+    public static double TICKS_PER_INCH = 439;
 
-    public static double DRIVETRAIN_WIDTH;
+    public static double DRIVETRAIN_WIDTH = 21.75; //Need to double check
     public static double INCHES_PER_REV;
     public static double MAX_VELOCITY_TICKS_PER_100MS = 8000;
 
     private double leftPower, rightPower = 0;
-    public double kP = 5.0;
+    public double kP = 0.1;
     public double kI = 0;
     public double kD = 0;
     public double kF = 0.128;
@@ -37,7 +37,6 @@ public class Drivetrain extends Subsystem {
     public Drivetrain(int leftMain, int leftSlaveOne, int leftSlaveTwo, int rightMain, int rightSlaveOne,
                       int rightSlaveTwo) {
         super();
-        this.gyro = new PigeonIMU(this.leftSlaveTwo);
 
         this.leftMain =  TalonSRXFactory.createDefaultTalon(leftMain);
         this.leftSlaveOne = TalonSRXFactory.createPermanentSlaveTalon(leftSlaveOne, leftMain);
@@ -58,6 +57,8 @@ public class Drivetrain extends Subsystem {
         this.rightMain.setNeutralMode(NeutralMode.Brake);
         this.rightSlaveOne.setNeutralMode(NeutralMode.Brake);
         this.rightSlaveTwo.setNeutralMode(NeutralMode.Brake);
+
+        this.gyro = new PigeonIMU(this.leftSlaveTwo);
 
         this.setPID(kP, kI, kD, kF);
 
@@ -107,6 +108,14 @@ public class Drivetrain extends Subsystem {
         return rightTalonPosition;
     }
 
+    public double getLeftInches() {
+        return getLeftPosition() / TICKS_PER_INCH;
+    }
+
+    public double getRightInches() {
+        return getRightPosition() / TICKS_PER_INCH;
+    }
+
     @Override
     public void periodic() {
         leftTalonVelocity = leftMain.getSelectedSensorVelocity(0);
@@ -152,6 +161,8 @@ public class Drivetrain extends Subsystem {
         builder.addDoubleProperty("RightTalonVelocity", this::getRightVelocity, null);        
         builder.addDoubleProperty("LeftTalonPosition", this::getLeftPosition, null);
         builder.addDoubleProperty("RightTalonPosition", this::getRightPosition, null);
+        builder.addDoubleProperty("LeftInches", this::getLeftInches, null);
+        builder.addDoubleProperty("RightInches", this::getRightInches, null);
     }
       
     public double getGyroAngle() {
