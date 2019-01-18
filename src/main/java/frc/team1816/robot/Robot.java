@@ -60,7 +60,6 @@ public class Robot extends TimedRobot {
         BadLog.createTopicSubscriber(LOG_GAMEPAD_VELOCITY_MODE, "T/F", DataInferMode.DEFAULT);
 
         log.setDoubleToStringFunction( (d) -> String.format("%.3f", d) );
-        log.finishInitialization();
 
 
         Components.getInstance();
@@ -78,6 +77,7 @@ public class Robot extends TimedRobot {
         table.getEntry("kF").setDouble(drivetrain.kF);
 
         startTime = System.currentTimeMillis();
+        log.finishInitialization();
 
     }
 
