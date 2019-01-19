@@ -68,6 +68,7 @@ public class Robot extends TimedRobot {
         Controls.getInstance();
 
         table = NetworkTableInstance.getDefault().getTable("Shuffleboard_PID");
+        
         drivetrain = Components.getInstance().drivetrain;
         arm = Components.getInstance().arm;
         intake = Components.getInstance().intake;

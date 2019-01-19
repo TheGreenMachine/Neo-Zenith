@@ -170,6 +170,16 @@ public class Drivetrain extends Subsystem {
     public double getYPos() {
         return yPos;
     }
+    
+    public void resetEncoders() {
+        this.leftMain.getSensorCollection().setQuadraturePosition(0, 10);
+        this.rightMain.getSensorCollection().setQuadraturePosition(0, 10);
+    }
+
+    public void resetGyro(){
+        this.gyro.setYaw(0, 10);
+        this.gyro.setFusedHeading(0, 10);
+    }
 
     public void setPID(double pValue, double iValue, double dValue, double fValue){
         this.kP = pValue;
@@ -200,6 +210,7 @@ public class Drivetrain extends Subsystem {
         builder.addDoubleProperty("RightTalonPosition", this::getRightPosition, null);
         builder.addDoubleProperty("LeftInches", this::getLeftInches, null);
         builder.addDoubleProperty("RightInches", this::getRightInches, null);
+        builder.addDoubleProperty("GyroAngle", this::getGyroAngle, null);
     }
 
     public void initCoordinateTracking() {
