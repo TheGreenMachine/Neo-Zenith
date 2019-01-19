@@ -5,6 +5,8 @@ import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
 import frc.team1816.robot.Robot;
@@ -29,7 +31,11 @@ public class Drivetrain extends Subsystem {
     public double kI = 0;
     public double kD = 0;
     public double kF = 0.128;
-    private double leftTalonVelocity, rightTalonVelocity, leftTalonPosition, rightTalonPosition;
+    private double leftTalonVelocity, rightTalonVelocity, leftTalonPosition, rightTalonPosition, gyroAngle;
+
+    private double xPos, yPos, prevX, prevY, prevLeftInches, prevRightInches, initAngle;
+
+    private NetworkTable positions;
 
     private boolean isPercentOutput;
 
@@ -37,6 +43,7 @@ public class Drivetrain extends Subsystem {
                       int rightSlaveTwoID) {
         super();
 
+        this.positions = NetworkTableInstance.getDefault().getTable("positions");
         this.leftMain =  TalonSRXFactory.createDefaultTalon(leftMainID);
         this.leftSlaveOne = TalonSRXFactory.createPermanentSlaveTalon(leftSlaveOneID, leftMainID);
         this.leftSlaveTwo = TalonSRXFactory.createPermanentSlaveTalon(leftSlaveTwoID, leftMainID);
@@ -59,6 +66,8 @@ public class Drivetrain extends Subsystem {
 
         this.gyro = new PigeonIMU(this.leftSlaveTwo);
 
+        initCoordinateTracking();
+
         this.setPID(kP, kI, kD, kF);
 
         this.leftMain.selectProfileSlot(0,0);
@@ -76,7 +85,10 @@ public class Drivetrain extends Subsystem {
                 this::getD,"join:Drivetrain/PID", "hide");
         BadLog.createTopic(Robot.LOG_DRIVETRAIN_PID_F, BadLog.UNITLESS,
                 this::getF,"join:Drivetrain/PID", "hide");
-
+        BadLog.createTopic(Robot.LOG_DRIVETRAIN_POSTRACK_X, "inches",
+                this::getXPos, "hide", "join:Drivetrain/Position");
+        BadLog.createTopic(Robot.LOG_DRIVETRAIN_POSTRACK_Y, "inches",
+                this::getYPos, "hide", "join:Drivetrain/Position");
     }
 
     public void setDrivetrainVelocity(double leftPower, double rightPower){
@@ -117,6 +129,7 @@ public class Drivetrain extends Subsystem {
 
     @Override
     public void periodic() {
+        gyroAngle = getGyroAngle();
         leftTalonVelocity = leftMain.getSelectedSensorVelocity(0);
         rightTalonVelocity = rightMain.getSelectedSensorVelocity(0);
         leftTalonPosition = leftMain.getSelectedSensorPosition(0);
@@ -131,6 +144,31 @@ public class Drivetrain extends Subsystem {
         }
         System.out.println("Left Velocity: " + getLeftVelocity() +
                             " Right Velocity: " + getRightVelocity());
+
+        double currLeftInches = getLeftInches();
+        double currRightInches = getRightInches();
+        double avgDistance = ((currLeftInches - prevLeftInches) + (currRightInches - prevRightInches)) / 2;
+        double theta = (Math.toRadians(initAngle - gyroAngle));
+
+        xPos = avgDistance * Math.cos(theta) + prevX;
+        yPos = avgDistance * Math.sin(theta) + prevY;
+
+        positions.getEntry("xPos").setDouble(xPos);
+        positions.getEntry("yPos").setDouble(yPos);
+
+        prevX = xPos;
+        prevY = yPos;
+        prevLeftInches = currLeftInches;
+        prevRightInches = currRightInches;
+
+    }
+
+    public double getXPos() {
+        return  xPos;
+    }
+
+    public double getYPos() {
+        return yPos;
     }
 
     public void setPID(double pValue, double iValue, double dValue, double fValue){
@@ -162,6 +200,17 @@ public class Drivetrain extends Subsystem {
         builder.addDoubleProperty("RightTalonPosition", this::getRightPosition, null);
         builder.addDoubleProperty("LeftInches", this::getLeftInches, null);
         builder.addDoubleProperty("RightInches", this::getRightInches, null);
+    }
+
+    public void initCoordinateTracking() {
+        xPos = 0;
+        yPos = 0;
+        prevRightInches = 0.0;
+        prevLeftInches = 0.0;
+        prevX = 0;
+        prevY = 0;
+        initAngle = getGyroAngle();
+        System.out.println("Initial Angle: " + initAngle);
     }
       
     public double getGyroAngle() {

@@ -30,6 +30,8 @@ public class Robot extends TimedRobot {
     public static final String LOG_DRIVETRAIN_PID_I = "Drivetrain/PID_I";
     public static final String LOG_DRIVETRAIN_PID_D = "Drivetrain/PID_D";
     public static final String LOG_DRIVETRAIN_PID_F = "Drivetrain/PID_F";
+    public static final String LOG_DRIVETRAIN_POSTRACK_X = "Drivetrain/PositionTracking_X";
+    public static final String LOG_DRIVETRAIN_POSTRACK_Y = "Drivetrain/PositionTracking_Y";
 
     private Drivetrain drivetrain;
     private Arm arm;
