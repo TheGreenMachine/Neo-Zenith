@@ -19,11 +19,9 @@ public class Drivetrain extends Subsystem {
     public static final int kLongCANTimeoutMs = 100; //use for constructors
     public static final double kDriveVoltageRampRate = 0.0;
 
-    public static double TICKS_PER_REV;
     public static double TICKS_PER_INCH = 439;
 
     public static double DRIVETRAIN_WIDTH = 21.75; //Need to double check
-    public static double INCHES_PER_REV;
     public static double MAX_VELOCITY_TICKS_PER_100MS = 8000;
 
     private double leftPower, rightPower = 0;
