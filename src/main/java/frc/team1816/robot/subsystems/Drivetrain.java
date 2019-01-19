@@ -103,6 +103,11 @@ public class Drivetrain extends Subsystem {
         isPercentOutput = true;
     }
 
+    public double getP() { return kP; }
+    public double getI() { return kI; }
+    public double getD() { return kD; }
+    public double getF() { return kF; }
+
     public double getLeftVelocity(){
         return leftTalonVelocity;
     }
@@ -125,6 +130,29 @@ public class Drivetrain extends Subsystem {
 
     public double getRightInches() {
         return getRightPosition() / TICKS_PER_INCH;
+    }
+
+    public double getGyroAngle() {
+        return gyro.getFusedHeading();
+    }
+
+    public double getXPos() {
+        return  xPos;
+    }
+
+    public double getYPos() {
+        return yPos;
+    }
+
+    public void initCoordinateTracking() {
+        xPos = 0;
+        yPos = 0;
+        prevRightInches = 0.0;
+        prevLeftInches = 0.0;
+        prevX = 0;
+        prevY = 0;
+        initAngle = getGyroAngle();
+        System.out.println("Initial Angle: " + initAngle);
     }
 
     @Override
@@ -160,15 +188,6 @@ public class Drivetrain extends Subsystem {
         prevY = yPos;
         prevLeftInches = currLeftInches;
         prevRightInches = currRightInches;
-
-    }
-
-    public double getXPos() {
-        return  xPos;
-    }
-
-    public double getYPos() {
-        return yPos;
     }
     
     public void resetEncoders() {
@@ -213,28 +232,8 @@ public class Drivetrain extends Subsystem {
         builder.addDoubleProperty("GyroAngle", this::getGyroAngle, null);
     }
 
-    public void initCoordinateTracking() {
-        xPos = 0;
-        yPos = 0;
-        prevRightInches = 0.0;
-        prevLeftInches = 0.0;
-        prevX = 0;
-        prevY = 0;
-        initAngle = getGyroAngle();
-        System.out.println("Initial Angle: " + initAngle);
-    }
-      
-    public double getGyroAngle() {
-        return gyro.getFusedHeading();
-    }
-
     @Override
     protected void initDefaultCommand() { }
-
-    double getP() { return kP; }
-    double getI() { return kI; }
-    double getD() { return kD; }
-    double getF() { return kF; }
 
     private void configureMaster(TalonSRX talon, boolean left) {
         talon.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 5, 100);
