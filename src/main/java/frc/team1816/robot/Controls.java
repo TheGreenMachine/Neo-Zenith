@@ -7,6 +7,8 @@ import com.edinarobotics.utils.gamepad.gamepadfilters.GamepadFilter;
 import com.edinarobotics.utils.gamepad.gamepadfilters.GamepadFilterSet;
 import com.edinarobotics.utils.gamepad.gamepadfilters.PowerFilter;
 
+import frc.team1816.robot.commands.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,8 @@ public class Controls {
 
         gamepadDriver = new FilteredGamepad(0,gamepadDriverFilterSet);
 
+        gamepadDriver.diamondUp().whenPressed(new ResetDriveEncodersCommand());
+        gamepadDriver.diamondLeft().whenPressed(new ResetGyroCommand());
     }
 
     public static Controls getInstance(){
