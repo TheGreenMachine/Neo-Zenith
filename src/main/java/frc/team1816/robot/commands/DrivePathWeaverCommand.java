@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team1816.robot.Components;
 import frc.team1816.robot.subsystems.Drivetrain;
+import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.PathfinderFRC;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.followers.EncoderFollower;
@@ -14,7 +15,7 @@ public class DrivePathWeaverCommand extends Command {
   private String pathName = "TestPath"; 
 
   private EncoderFollower leftFollower, rightFollower;
-  private Notifier followerNotifier;
+  //private Notifier followerNotifier; //Don't think it is required
 
   public DrivePathWeaverCommand() {
     super("drivepathweavercommand");
@@ -30,20 +31,38 @@ public class DrivePathWeaverCommand extends Command {
     leftFollower = new EncoderFollower(leftTrajectory);
     rightFollower = new EncoderFollower(rightTrajectory);
 
-    //leftFollower.configureEncoder(initial_position, ticks_per_revolution, wheel_diameter); //Need to find TICKS_PER_REV
+    leftFollower.configureEncoder((int)drivetrain.getLeftPosition(), (int)drivetrain.TICKS_PER_REV, drivetrain.DRIVETRAIN_WIDTH); //Need to find TICKS_PER_REV
+    leftFollower.configurePIDVA(drivetrain.kP, drivetrain.kI, drivetrain.kD, 1/drivetrain.MAX_VELOCITY_TICKS_PER_100MS, 0); //Need to tune PID
+
+    rightFollower.configureEncoder((int)drivetrain.getRightPosition(), (int)drivetrain.TICKS_PER_REV, drivetrain.DRIVETRAIN_WIDTH); //Need to find TICKS_PER_REV
+    rightFollower.configurePIDVA(drivetrain.kP, drivetrain.kI, drivetrain.kD, 1/drivetrain.MAX_VELOCITY_TICKS_PER_100MS, 0); // Need to tune PID
   }
 
   @Override
   protected void execute() {
+    double leftSpeed = leftFollower.calculate((int)drivetrain.getLeftPosition());
+    double rightSpeed = rightFollower.calculate((int)drivetrain.getRightPosition());
+    
+    double currentHeading = drivetrain.getGyroAngle();
+    double desiredHeading = Pathfinder.r2d(leftFollower.getHeading());
+    double headingDifference = Pathfinder.boundHalfDegrees(desiredHeading - currentHeading);
+    double turn = 0.8 * (-1.0/80.0) * headingDifference;
+
+    drivetrain.setDrivetrainPercentOutput(leftSpeed + turn, rightSpeed - turn);
   }
 
   @Override
   protected boolean isFinished() {
-    return false;
+    if ((leftFollower.isFinished()) || (rightFollower.isFinished())){
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @Override
   protected void end() {
+    drivetrain.setDrivetrainPercentOutput(0, 0);
   }
 
   @Override
