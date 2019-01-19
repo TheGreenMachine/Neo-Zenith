@@ -46,7 +46,7 @@ public class DrivePathWeaverCommand extends Command {
     double currentHeading = drivetrain.getGyroAngle();
     double desiredHeading = Pathfinder.r2d(leftFollower.getHeading());
     double headingDifference = Pathfinder.boundHalfDegrees(desiredHeading - currentHeading);
-    double turn = 0.8 * (-1.0/80.0) * headingDifference;
+    double turn = 0.8 * (-1.0/80.0) * headingDifference; //Error adjustment: Formula given in Jaci's documentation
 
     drivetrain.setDrivetrainPercentOutput(leftSpeed + turn, rightSpeed - turn);
   }
