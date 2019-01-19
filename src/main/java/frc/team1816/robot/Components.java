@@ -50,6 +50,4 @@ public class Components {
         }
         return instance;
     }
-
-
 }
