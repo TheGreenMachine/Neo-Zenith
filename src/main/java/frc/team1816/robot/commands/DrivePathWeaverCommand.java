@@ -31,11 +31,13 @@ public class DrivePathWeaverCommand extends Command {
     leftFollower = new EncoderFollower(leftTrajectory);
     rightFollower = new EncoderFollower(rightTrajectory);
 
+    double maxVelocityInches = 10 * drivetrain.MAX_VELOCITY_TICKS_PER_100MS / drivetrain.TICKS_PER_INCH; //Converts units to in/s
+
     leftFollower.configureEncoder((int)drivetrain.getLeftPosition(), (int)drivetrain.TICKS_PER_REV, drivetrain.DRIVETRAIN_WIDTH); //Need to find TICKS_PER_REV
-    leftFollower.configurePIDVA(drivetrain.kP, drivetrain.kI, drivetrain.kD, 1/drivetrain.MAX_VELOCITY_TICKS_PER_100MS, 0); //Need to tune PID
+    leftFollower.configurePIDVA(drivetrain.kP, drivetrain.kI, drivetrain.kD, 1/maxVelocityInches, 0); //Need to tune PID
 
     rightFollower.configureEncoder((int)drivetrain.getRightPosition(), (int)drivetrain.TICKS_PER_REV, drivetrain.DRIVETRAIN_WIDTH); //Need to find TICKS_PER_REV
-    rightFollower.configurePIDVA(drivetrain.kP, drivetrain.kI, drivetrain.kD, 1/drivetrain.MAX_VELOCITY_TICKS_PER_100MS, 0); // Need to tune PID
+    rightFollower.configurePIDVA(drivetrain.kP, drivetrain.kI, drivetrain.kD, 1/maxVelocityInches, 0); // Need to tune PID
   }
 
   @Override
