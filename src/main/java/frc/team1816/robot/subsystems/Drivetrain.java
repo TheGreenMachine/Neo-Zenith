@@ -31,6 +31,7 @@ public class Drivetrain extends Subsystem {
     public double kD = 0;
     public double kF = 0.128;
     private double leftTalonVelocity, rightTalonVelocity, leftTalonPosition, rightTalonPosition, gyroAngle;
+    private double leftTalonError, rightTalonError;
 
     private double xPos, yPos, prevX, prevY, prevLeftInches, prevRightInches, initAngle;
 
@@ -76,6 +77,18 @@ public class Drivetrain extends Subsystem {
                 this::getLeftVelocity, "hide", "join:Drivetrain/Velocities");
         BadLog.createTopic(Robot.LOG_DRIVETRAIN_RIGHT_VEL, "NativeUnits",
                 this::getRightVelocity, "hide", "join:Drivetrain/Velocities");
+        BadLog.createTopic(Robot.LOG_DRIVETRAIN_LEFT_VEL_INPUT, "NativeUnits",
+                this::getLeftPower, "hide", "join:Drivetrain/VelocityInputs");
+        BadLog.createTopic(Robot.LOG_DRIVETRAIN_RIGHT_VEL_INPUT, "NativeUnits",
+                this::getRightPower, "hide", "join:Drivetrain/VelocityInputs");
+        BadLog.createTopic(Robot.LOG_DRIVETRAIN_LEFT_POSITION, "NativeUnits",
+                this::getLeftPosition, "hide", "join:Drivetrain/TalonPosition");
+        BadLog.createTopic(Robot.LOG_DRIVETRAIN_RIGHT_POSITION, "NativeUnits",
+                this::getRightPosition, "hide", "join:Drivetrain/TalonPosition");
+        BadLog.createTopic(Robot.LOG_DRIVETRAIN_LEFT_ERROR, "NativeUnits",
+                this::getLeftError, "hide", "join:Drivetrain/TalonError");
+        BadLog.createTopic(Robot.LOG_DRIVETRAIN_RIGHT_ERROR, "NativeUnits",
+                this::getRightError, "hide", "join:Drivetrain/TalonError");
         BadLog.createTopic(Robot.LOG_DRIVETRAIN_PID_P, BadLog.UNITLESS,
                 this::getP, "join:Drivetrain/PID", "hide");
         BadLog.createTopic(Robot.LOG_DRIVETRAIN_PID_I, BadLog.UNITLESS,
@@ -83,16 +96,16 @@ public class Drivetrain extends Subsystem {
         BadLog.createTopic(Robot.LOG_DRIVETRAIN_PID_D, BadLog.UNITLESS,
                 this::getD,"join:Drivetrain/PID", "hide");
         BadLog.createTopic(Robot.LOG_DRIVETRAIN_PID_F, BadLog.UNITLESS,
-                this::getF,"join:Drivetrain/PID", "hide");
+                this::getF,"join:Drivetrain/PID", "hide");                
         BadLog.createTopic(Robot.LOG_DRIVETRAIN_POSTRACK_X, "inches",
-                this::getXPos, "hide", "join:Drivetrain/Position");
+                this::getXPos, "hide", "join:Drivetrain/Coordinates");
         BadLog.createTopic(Robot.LOG_DRIVETRAIN_POSTRACK_Y, "inches",
-                this::getYPos, "hide", "join:Drivetrain/Position");
+                this::getYPos, "hide", "join:Drivetrain/Coordinates");
     }
 
     public void setDrivetrainVelocity(double leftPower, double rightPower){
-        this.leftPower = leftPower;
-        this.rightPower = rightPower;
+        this.leftPower = MAX_VELOCITY_TICKS_PER_100MS * leftPower;
+        this.rightPower = MAX_VELOCITY_TICKS_PER_100MS * rightPower;
         isPercentOutput = false;
     }
 
@@ -106,6 +119,14 @@ public class Drivetrain extends Subsystem {
     public double getI() { return kI; }
     public double getD() { return kD; }
     public double getF() { return kF; }
+
+    public double getLeftPower(){
+        return leftPower;
+    }
+
+    public double getRightPower(){
+        return rightPower;
+    }
 
     public double getLeftVelocity(){
         return leftTalonVelocity;
@@ -129,6 +150,14 @@ public class Drivetrain extends Subsystem {
 
     public double getRightInches() {
         return getRightPosition() / TICKS_PER_INCH;
+    }
+
+    public double getLeftError(){
+        return leftTalonError;
+    }
+
+    public double getRightError(){
+        return rightTalonError;
     }
 
     public double getGyroAngle() {
@@ -161,13 +190,15 @@ public class Drivetrain extends Subsystem {
         rightTalonVelocity = rightMain.getSelectedSensorVelocity(0);
         leftTalonPosition = leftMain.getSelectedSensorPosition(0);
         rightTalonPosition = rightMain.getSelectedSensorPosition(0);
+        leftTalonError = leftMain.getClosedLoopError(0);
+        rightTalonError = rightMain.getClosedLoopError(0);
 
         if (isPercentOutput){
             this.leftMain.set(ControlMode.PercentOutput, leftPower);
             this.rightMain.set(ControlMode.PercentOutput, rightPower);
         } else {
-            this.leftMain.set(ControlMode.Velocity, MAX_VELOCITY_TICKS_PER_100MS * leftPower);
-            this.rightMain.set(ControlMode.Velocity, MAX_VELOCITY_TICKS_PER_100MS * rightPower);
+            this.leftMain.set(ControlMode.Velocity, leftPower);
+            this.rightMain.set(ControlMode.Velocity, rightPower);
         }
         System.out.println("Left Velocity: " + getLeftVelocity() +
                             " Right Velocity: " + getRightVelocity());

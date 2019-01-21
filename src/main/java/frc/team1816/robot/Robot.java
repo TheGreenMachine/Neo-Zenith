@@ -22,6 +22,12 @@ import java.util.Date;
 public class Robot extends TimedRobot {
     public static final String LOG_DRIVETRAIN_LEFT_VEL = "Drivetrain/LeftVel";
     public static final String LOG_DRIVETRAIN_RIGHT_VEL = "Drivetrain/RightVel";
+    public static final String LOG_DRIVETRAIN_LEFT_VEL_INPUT = "Divetrain/LeftVelInput";
+    public static final String LOG_DRIVETRAIN_RIGHT_VEL_INPUT = "Drivetrain/RightVelInput";
+    public static final String LOG_DRIVETRAIN_LEFT_POSITION = "Drivetrain/LeftPosition";
+    public static final String LOG_DRIVETRAIN_RIGHT_POSITION = "Drivetrain/RightPosition";
+    public static final String LOG_DRIVETRAIN_LEFT_ERROR = "Drivetrain/LeftError";
+    public static final String LOG_DRIVETRAIN_RIGHT_ERROR = "Drivetrain/RightError";
     public static final String LOG_ARM_POS = "Arm/Position";
     public static final String LOG_GAMEPAD_LEFT_POWER = "Gamepad/LeftPower";
     public static final String LOG_GAMEPAD_RIGHT_POWER = "Gamepad/RightPower";
