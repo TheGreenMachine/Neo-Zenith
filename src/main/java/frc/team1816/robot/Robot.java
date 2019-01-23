@@ -6,7 +6,9 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import frc.team1816.robot.commands.DrivePathWeaverAuto;
 import frc.team1816.robot.commands.GamepadArmCommand;
 import frc.team1816.robot.commands.GamepadDriveCommand;
 import frc.team1816.robot.commands.GamepadIntakeCommand;
@@ -43,6 +45,9 @@ public class Robot extends TimedRobot {
     private Arm arm;
     private Intake intake;
     private Shooter shooter;
+
+    private DrivePathWeaverAuto drivePathWeaverAuto;
+    
     private BadLog log;
     private NetworkTable table;
     private static double startTime;
@@ -80,6 +85,8 @@ public class Robot extends TimedRobot {
         intake = Components.getInstance().intake;
         shooter = Components.getInstance().shooter;
 
+        drivePathWeaverAuto = new DrivePathWeaverAuto();
+
         table.getEntry("kP").setDouble(drivetrain.kP);
         table.getEntry("kI").setDouble(drivetrain.kI);
         table.getEntry("kD").setDouble(drivetrain.kD);
@@ -98,7 +105,9 @@ public class Robot extends TimedRobot {
     public void disabledInit() { }
 
     @Override
-    public void autonomousInit() { }
+    public void autonomousInit() {
+        drivePathWeaverAuto.start();
+     }
 
     @Override
     public void teleopInit() {
@@ -124,7 +133,16 @@ public class Robot extends TimedRobot {
     public void disabledPeriodic() { }
     
     @Override
-    public void autonomousPeriodic() { }
+    public void autonomousPeriodic() {
+        // update all log data
+        log.updateTopics();
+        // only write logs if the DriverStation is enabled
+        if (!DriverStation.getInstance().isDisabled()) {
+            log.log();
+        
+        }
+        Scheduler.getInstance().run();
+     }
 
     @Override
     public void teleopPeriodic() {
