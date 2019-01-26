@@ -92,6 +92,8 @@ public class Robot extends TimedRobot {
         table.getEntry("kD").setDouble(drivetrain.kD);
         table.getEntry("kF").setDouble(drivetrain.kF);
 
+        table.getEntry("ArmSetPoint").setDouble(arm.getArmPosition());
+
         startTime = System.currentTimeMillis();
         log.finishInitialization();
 
@@ -152,6 +154,8 @@ public class Robot extends TimedRobot {
         if (!DriverStation.getInstance().isDisabled()) {
             log.log();
         }
+
+        arm.setArmPosition(table.getEntry("ArmSetPoint").getDouble(arm.getArmPosition()));
 
         System.out.println("Gyro Angle: " + drivetrain.getGyroAngle());
         System.out.println("Potentiometer: " + arm.getArmPos());

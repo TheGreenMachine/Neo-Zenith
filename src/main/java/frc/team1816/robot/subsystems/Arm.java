@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.team1816.robot.Robot;
@@ -27,6 +28,7 @@ public class Arm extends Subsystem {
 
     private AnalogPotentiometer potentiometer;
     private double armPosition;
+    private double armSetpoint;
 
     public Arm(int armTalon, int potentiometer){
         super();
@@ -52,6 +54,11 @@ public class Arm extends Subsystem {
 
         this.armTalon.configAllowableClosedloopError(0, kPIDLoopIdx, kTimeoutMs);
 
+        this.armTalon.configForwardSoftLimitEnable(true);
+        this.armTalon.configReverseSoftLimitEnable(true);
+        this.armTalon.configForwardSoftLimitThreshold(1475, kTimeoutMs);
+        this.armTalon.configReverseSoftLimitThreshold(915, kTimeoutMs);
+
         int absolutePosition = this.armTalon.getSensorCollection().getPulseWidthPosition();
 
         /* Mask out overflows, keep bottom 12 bits */
@@ -59,23 +66,30 @@ public class Arm extends Subsystem {
 
         /* Set the quadrature (relative) sensor to match absolute */
         this.armTalon.setSelectedSensorPosition(absolutePosition, kPIDLoopIdx, kTimeoutMs);
+
+        this.armSetpoint = getArmPosition();
     }
 
     public void setArm(double armSpeed){
-        if (((getArmPos() < LOWER_THRESHOLD) && (armSpeed < 0)) || ((getArmPos() > UPPER_THRESHOLD) && (armSpeed > 0))){
-            this.armSpeed = 0;
-        } else {
+//        if (((getArmPos() < LOWER_THRESHOLD) && (armSpeed < 0)) || ((getArmPos() > UPPER_THRESHOLD) && (armSpeed > 0))){
+//            this.armSpeed = 0;
+//        } else {
             this.armSpeed = armSpeed;
-        }
+//        }
         this.armTalon.set(ControlMode.PercentOutput, this.armSpeed);
     }
 
     public void setArmPosition(double armPosition) {
+        this.armSetpoint = armPosition;
         armTalon.set(ControlMode.Position, armPosition * 480 * 4096);
     }
 
     public double getArmPosition() {
         return armTalon.getSensorCollection().getPulseWidthPosition();
+    }
+
+    public double getSetArmPosition() {
+        return armSetpoint;
     }
 
     public double getArmPos() {
@@ -120,7 +134,7 @@ public class Arm extends Subsystem {
         builder.addDoubleProperty("Arm/kP", this::getkP, this::setkP);
         builder.addDoubleProperty("Arm/kI", this::getkI, this::setkI);
         builder.addDoubleProperty("Arm/kD", this::getkD, this::setkD);
-        builder.addDoubleProperty("Arm/ArmPosition", this::getArmPosition, this::setArmPosition);
+        builder.addDoubleProperty("Arm/ArmPosition/real", this::getArmPosition, null);
     }
 
     @Override
