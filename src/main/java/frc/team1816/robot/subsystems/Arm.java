@@ -42,8 +42,8 @@ public class Arm extends Subsystem {
         /* Config the peak and nominal outputs, 12V means full */
         this.armTalon.configNominalOutputForward(0, kTimeoutMs);
         this.armTalon.configNominalOutputReverse(0, kTimeoutMs);
-        this.armTalon.configPeakOutputForward(1, kTimeoutMs);
-        this.armTalon.configPeakOutputReverse(-1, kTimeoutMs);
+        this.armTalon.configPeakOutputForward(0.8, kTimeoutMs);
+        this.armTalon.configPeakOutputReverse(-0.8, kTimeoutMs);
 
         this.armTalon.config_kF(kPIDLoopIdx, kF, kTimeoutMs);
         this.armTalon.config_kP(kPIDLoopIdx, kP, kTimeoutMs);
@@ -58,7 +58,6 @@ public class Arm extends Subsystem {
         absolutePosition &= 0xFFF;
 
         /* Set the quadrature (relative) sensor to match absolute */
-
         this.armTalon.setSelectedSensorPosition(absolutePosition, kPIDLoopIdx, kTimeoutMs);
     }
 
@@ -72,7 +71,7 @@ public class Arm extends Subsystem {
     }
 
     public void setArmPosition(double armPosition) {
-        armTalon.set(ControlMode.Position, armPosition * 4096);
+        armTalon.set(ControlMode.Position, armPosition * 480 * 4096);
     }
 
     public double getArmPosition() {
@@ -121,6 +120,7 @@ public class Arm extends Subsystem {
         builder.addDoubleProperty("Arm/kP", this::getkP, this::setkP);
         builder.addDoubleProperty("Arm/kI", this::getkI, this::setkI);
         builder.addDoubleProperty("Arm/kD", this::getkD, this::setkD);
+        builder.addDoubleProperty("Arm/ArmPosition", this::getArmPosition, this::setArmPosition);
     }
 
     @Override
