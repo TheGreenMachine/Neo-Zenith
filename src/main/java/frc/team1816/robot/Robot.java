@@ -92,7 +92,12 @@ public class Robot extends TimedRobot {
         table.getEntry("kD").setDouble(drivetrain.kD);
         table.getEntry("kF").setDouble(drivetrain.kF);
 
-        table.getEntry("ArmSetPoint").setDouble(arm.getArmPosition());
+        table.getEntry("ArmSetPoint").setDouble(arm.getArmSetpoint());
+
+        table.getEntry("arm_kP").setDouble(arm.getkP());
+        table.getEntry("arm_kI").setDouble(arm.getkI());
+        table.getEntry("arm_kD").setDouble(arm.getkD());
+        table.getEntry("arm_kF").setDouble(arm.getkF());
 
         startTime = System.currentTimeMillis();
         log.finishInitialization();
@@ -114,7 +119,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         drivetrain.setDefaultCommand(new GamepadDriveCommand());
-        arm.setDefaultCommand(new GamepadArmCommand());
+//        arm.setDefaultCommand(new GamepadArmCommand());
         intake.setDefaultCommand(new GamepadIntakeCommand());
         shooter.setDefaultCommand(new GamepadShooterCommand());
 
@@ -125,6 +130,12 @@ public class Robot extends TimedRobot {
         double fValue = table.getEntry("kF").getDouble(drivetrain.kF);
         drivetrain.setPID(pValue, iValue, dValue, fValue);
 
+        double armPValue = table.getEntry("arm_kP").getDouble(arm.getkP());
+        double armIValue = table.getEntry("arm_kI").getDouble(arm.getkI());
+        double armDValue = table.getEntry("arm_kD").getDouble(arm.getkD());
+        arm.setPID(armPValue, armIValue, armDValue);
+
+        arm.setArmPosition(1000);
     }
 
     @Override
@@ -155,7 +166,7 @@ public class Robot extends TimedRobot {
             log.log();
         }
 
-        arm.setArmPosition(table.getEntry("ArmSetPoint").getDouble(arm.getArmPosition()));
+//        arm.setArmPosition(table.getEntry("ArmSetPoint").getDouble(arm.getArmSetpoint()));
 
         System.out.println("Gyro Angle: " + drivetrain.getGyroAngle());
         System.out.println("Potentiometer: " + arm.getArmPos());

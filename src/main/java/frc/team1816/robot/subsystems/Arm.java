@@ -5,11 +5,10 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.team1816.robot.Robot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
+import frc.team1816.robot.Robot;
 
 public class Arm extends Subsystem {
     private TalonSRX armTalon;
@@ -22,7 +21,7 @@ public class Arm extends Subsystem {
     private static final int kTimeoutMs = 30;
 
     private double kF = 0;
-    private double kP = 0;
+    private double kP = 0.8;
     private double kI = 0;
     private double kD = 0;
 
@@ -81,14 +80,16 @@ public class Arm extends Subsystem {
 
     public void setArmPosition(double armPosition) {
         this.armSetpoint = armPosition;
-        armTalon.set(ControlMode.Position, armPosition * 480 * 4096);
+        armTalon.set(ControlMode.Position, armPosition);
+        System.out.println("Arm.ControlMode = " + armTalon.getControlMode());
+        System.out.println("Arm.TargetPosition = " + armTalon.getClosedLoopTarget());
     }
 
     public double getArmPosition() {
         return armTalon.getSensorCollection().getPulseWidthPosition();
     }
 
-    public double getSetArmPosition() {
+    public double getArmSetpoint() {
         return armSetpoint;
     }
 
@@ -100,16 +101,14 @@ public class Arm extends Subsystem {
         this.kF = kF;
     }
 
-    public void setkP(double kP) {
+    public void setPID(double kP, double kI, double kD) {
         this.kP = kP;
-    }
-
-    public void setkI(double kI) {
         this.kI = kI;
-    }
-
-    public void setkD(double kD) {
         this.kD = kD;
+        this.armTalon.config_kF(kPIDLoopIdx, kF, kTimeoutMs);
+        this.armTalon.config_kP(kPIDLoopIdx, kP, kTimeoutMs);
+        this.armTalon.config_kI(kPIDLoopIdx, kI, kTimeoutMs);
+        this.armTalon.config_kD(kPIDLoopIdx, kD, kTimeoutMs);
     }
 
     public double getkF() {
@@ -131,9 +130,9 @@ public class Arm extends Subsystem {
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.addDoubleProperty("Arm/kF", this::getkF, this::setkF);
-        builder.addDoubleProperty("Arm/kP", this::getkP, this::setkP);
-        builder.addDoubleProperty("Arm/kI", this::getkI, this::setkI);
-        builder.addDoubleProperty("Arm/kD", this::getkD, this::setkD);
+        builder.addDoubleProperty("Arm/kP", this::getkP, null);
+        builder.addDoubleProperty("Arm/kI", this::getkI, null);
+        builder.addDoubleProperty("Arm/kD", this::getkD, null);
         builder.addDoubleProperty("Arm/ArmPosition/real", this::getArmPosition, null);
     }
 
