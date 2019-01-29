@@ -25,8 +25,9 @@ public class DrivePathWeaverCommand extends Command {
 
   @Override
   protected void initialize() {
-    Trajectory leftTrajectory = PathfinderFRC.getTrajectory(pathName + ".left");
-    Trajectory rightTrajectory = PathfinderFRC.getTrajectory(pathName + ".right");
+    //PathWeaver bug - replace left and right trajectories
+    Trajectory rightTrajectory = PathfinderFRC.getTrajectory(pathName + ".left");
+    Trajectory leftTrajectory = PathfinderFRC.getTrajectory(pathName + ".right");
 
     leftFollower = new EncoderFollower(leftTrajectory);
     rightFollower = new EncoderFollower(rightTrajectory);
