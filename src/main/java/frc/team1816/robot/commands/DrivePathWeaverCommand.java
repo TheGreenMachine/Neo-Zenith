@@ -12,7 +12,7 @@ import jaci.pathfinder.followers.EncoderFollower;
 public class DrivePathWeaverCommand extends Command {
   private Drivetrain drivetrain;
 
-  private String pathName = "/home/lvuser/FirstPath"; 
+  private String pathName = "FirstPath"; 
 
   private EncoderFollower leftFollower, rightFollower;
   //private Notifier followerNotifier; //Don't think it is required
