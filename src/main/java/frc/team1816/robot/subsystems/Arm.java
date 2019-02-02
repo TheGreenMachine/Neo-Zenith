@@ -76,6 +76,7 @@ public class Arm extends Subsystem {
 
     public void setArm(double armSpeed) {
         this.armSpeed = armSpeed;
+        System.out.println("setArm called!");
         isPercentOutput = true;
         outputsChanged = true;
     }
@@ -126,9 +127,13 @@ public class Arm extends Subsystem {
 
     public boolean isBusy() {
         if (armTalon.getControlMode() == ControlMode.Position) {
-            return (armTalon.getClosedLoopError(kPIDLoopIdx) < ALLOWABLE_CLOSED_LOOP_ERROR);
+            return (armTalon.getClosedLoopError(kPIDLoopIdx) <= ALLOWABLE_CLOSED_LOOP_ERROR);
         }
         return false;
+    }
+
+    public boolean isPercentOutput() {
+        return isPercentOutput;
     }
 
     @Override

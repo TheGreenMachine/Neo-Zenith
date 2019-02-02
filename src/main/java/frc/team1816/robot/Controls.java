@@ -28,9 +28,6 @@ public class Controls {
 
         gamepadDriver.diamondUp().whenPressed(new ResetDriveEncodersCommand());
         gamepadDriver.diamondLeft().whenPressed(new ResetGyroCommand());
-        gamepadDriver.dPadLeft().whenPressed(new GamepadArmPositionCommand(Arm.REVERSE_SENSOR_LIMIT));
-        gamepadDriver.dPadRight().whenPressed(new GamepadArmPositionCommand(Arm.FORWARD_SENSOR_LIMIT));
-        gamepadDriver.diamondRight().whenPressed(new GamepadArmPositionCommand(1195)); // Midpoint
     }
 
     public static Controls getInstance(){

@@ -158,8 +158,6 @@ public class Robot extends TimedRobot {
             log.log();
         }
 
-//        arm.setArmPosition(table.getEntry("ArmSetPoint").getDouble(arm.getArmSetpoint()));
-
         System.out.println("Gyro Angle: " + drivetrain.getGyroAngle());
         Scheduler.getInstance().run();
     }
