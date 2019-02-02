@@ -14,6 +14,7 @@ public class Arm extends Subsystem {
 
     public static final int FORWARD_SENSOR_LIMIT = 1475;
     public static final int REVERSE_SENSOR_LIMIT = 915;
+    private static final int ALLOWABLE_CLOSED_LOOP_ERROR = 50;
 
     private static final int kPIDLoopIdx = 0;
     private static final int kTimeoutMs = 30;
@@ -26,8 +27,8 @@ public class Arm extends Subsystem {
     private double armPosition;
     private double armSpeed;
 
-    private boolean outputsChanged = true;
-    private boolean isPercentOutput = false;
+    private boolean outputsChanged;
+    private boolean isPercentOutput;
 
     public Arm(int armTalonId){
         super();
@@ -64,7 +65,7 @@ public class Arm extends Subsystem {
 
         this.setPID(kP, kI, kD);
 
-        this.armTalon.configAllowableClosedloopError(kPIDLoopIdx, 50, kTimeoutMs);
+        this.armTalon.configAllowableClosedloopError(kPIDLoopIdx, ALLOWABLE_CLOSED_LOOP_ERROR, kTimeoutMs);
 
         this.armTalon.configForwardSoftLimitEnable(true);
         this.armTalon.configReverseSoftLimitEnable(true);
@@ -84,11 +85,11 @@ public class Arm extends Subsystem {
         outputsChanged = true;
     }
 
-    public double getArmPositionAbsolute() {
+    public int getArmPositionAbsolute() {
         return armTalon.getSensorCollection().getPulseWidthPosition();
     }
 
-    public double getArmPosition() {
+    public int getArmPosition() {
         return armTalon.getSelectedSensorPosition();
     }
 
@@ -120,6 +121,13 @@ public class Arm extends Subsystem {
 
     public double getkD() {
         return kD;
+    }
+
+    public boolean isBusy() {
+        if (armTalon.getControlMode() == ControlMode.Position) {
+            return (armTalon.getClosedLoopError(kPIDLoopIdx) < ALLOWABLE_CLOSED_LOOP_ERROR);
+        }
+        return false;
     }
 
     @Override

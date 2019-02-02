@@ -30,7 +30,9 @@ public class GamepadArmCommand extends Command {
         } else if (gamepad.dPadDown().get()){
             this.arm.setArm(-power);
         } else {
-            this.arm.setArm(0);
+            if (!arm.isBusy()) {
+                this.arm.setArm(0);
+            }
         }
     }
 
