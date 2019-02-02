@@ -32,6 +32,7 @@ public class Robot extends TimedRobot {
     public static final String LOG_DRIVETRAIN_LEFT_ERROR = "Drivetrain/LeftError";
     public static final String LOG_DRIVETRAIN_RIGHT_ERROR = "Drivetrain/RightError";
     public static final String LOG_ARM_POS = "Arm/Position";
+    public static final String LOG_ARM_READING = "Arm/EncoderPosition";
     public static final String LOG_GAMEPAD_LEFT_POWER = "Gamepad/LeftPower";
     public static final String LOG_GAMEPAD_RIGHT_POWER = "Gamepad/RightPower";
     public static final String LOG_GAMEPAD_VELOCITY_MODE = "Gamepad/VelocityMode";
@@ -92,8 +93,6 @@ public class Robot extends TimedRobot {
         table.getEntry("kI").setDouble(drivetrain.kI);
         table.getEntry("kD").setDouble(drivetrain.kD);
         table.getEntry("kF").setDouble(drivetrain.kF);
-
-        table.getEntry("ArmSetPoint").setDouble(arm.getArmSetpoint());
 
         table.getEntry("arm_kP").setDouble(arm.getkP());
         table.getEntry("arm_kI").setDouble(arm.getkI());
@@ -174,7 +173,6 @@ public class Robot extends TimedRobot {
 //        arm.setArmPosition(table.getEntry("ArmSetPoint").getDouble(arm.getArmSetpoint()));
 
         System.out.println("Gyro Angle: " + drivetrain.getGyroAngle());
-        System.out.println("Potentiometer: " + arm.getArmPos());
         Scheduler.getInstance().run();
     }
 
