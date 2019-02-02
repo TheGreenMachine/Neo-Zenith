@@ -130,8 +130,14 @@ public class Arm extends Subsystem {
         builder.addDoubleProperty("Arm/PID/kD", this::getkD, null);
         builder.addStringProperty("Arm/ControlMode", () -> armTalon.getControlMode().toString(), null);
         builder.addDoubleProperty("Arm/CurrentPosition", this::getArmPosition, null);
-        builder.addDoubleProperty("Arm/TargetPosition", armTalon::getClosedLoopTarget, null);
-        builder.addDoubleProperty("Arm/ClosedLoopError", () -> armTalon.getClosedLoopError(0), null);
+        builder.addDoubleProperty("Arm/TargetPosition", () -> (
+                armTalon.getControlMode() == ControlMode.Position
+                        ? armTalon.getClosedLoopTarget() : 0
+        ), null);
+        builder.addDoubleProperty("Arm/ClosedLoopError", () -> (
+                armTalon.getControlMode() == ControlMode.Position
+                        ? armTalon.getClosedLoopError() : 0
+        ), null);
         builder.addDoubleProperty("Arm/MotorOutput", armTalon::getMotorOutputPercent, null);
     }
 
