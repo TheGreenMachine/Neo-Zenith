@@ -6,6 +6,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.team1816.robot.commands.DrivePathWeaverAuto;
@@ -135,7 +136,11 @@ public class Robot extends TimedRobot {
         double armDValue = table.getEntry("arm_kD").getDouble(arm.getkD());
         arm.setPID(armPValue, armIValue, armDValue);
 
-        arm.setArmPosition(1000);
+        arm.setArmPosition(915);
+        Timer.delay(10);
+        arm.setArmPosition(1475);
+        Timer.delay(10);
+        arm.setArmPosition(1200);
     }
 
     @Override

@@ -14,16 +14,16 @@ public class Arm extends Subsystem {
     private TalonSRX armTalon;
 
     private double armSpeed;
-    private final double LOWER_THRESHOLD = 0.164;
-    private final double UPPER_THRESHOLD = 0.363;
+    private static final int FORWARD_SENSOR_LIMIT = 1475;
+    private static final int REVERSE_SENSOR_LIMIT = 915;
 
     private static final int kPIDLoopIdx = 0;
     private static final int kTimeoutMs = 30;
 
     private double kF = 0;
-    private double kP = 0.8;
+    private double kP = 5.0;
     private double kI = 0;
-    private double kD = 0;
+    private double kD = 1.0;
 
     private AnalogPotentiometer potentiometer;
     private double armPosition;
@@ -43,20 +43,20 @@ public class Arm extends Subsystem {
         /* Config the peak and nominal outputs, 12V means full */
         this.armTalon.configNominalOutputForward(0, kTimeoutMs);
         this.armTalon.configNominalOutputReverse(0, kTimeoutMs);
-        this.armTalon.configPeakOutputForward(0.8, kTimeoutMs);
-        this.armTalon.configPeakOutputReverse(-0.8, kTimeoutMs);
+        this.armTalon.configPeakOutputForward(1, kTimeoutMs);
+        this.armTalon.configPeakOutputReverse(-1, kTimeoutMs);
 
         this.armTalon.config_kF(kPIDLoopIdx, kF, kTimeoutMs);
         this.armTalon.config_kP(kPIDLoopIdx, kP, kTimeoutMs);
         this.armTalon.config_kI(kPIDLoopIdx, kI, kTimeoutMs);
         this.armTalon.config_kD(kPIDLoopIdx, kD, kTimeoutMs);
 
-        this.armTalon.configAllowableClosedloopError(0, kPIDLoopIdx, kTimeoutMs);
+        this.armTalon.configAllowableClosedloopError(kPIDLoopIdx, 50, kTimeoutMs);
 
         this.armTalon.configForwardSoftLimitEnable(true);
         this.armTalon.configReverseSoftLimitEnable(true);
-        this.armTalon.configForwardSoftLimitThreshold(1475, kTimeoutMs);
-        this.armTalon.configReverseSoftLimitThreshold(915, kTimeoutMs);
+        this.armTalon.configForwardSoftLimitThreshold(FORWARD_SENSOR_LIMIT, kTimeoutMs);
+        this.armTalon.configReverseSoftLimitThreshold(REVERSE_SENSOR_LIMIT, kTimeoutMs);
 
         int absolutePosition = this.armTalon.getSensorCollection().getPulseWidthPosition();
 
@@ -80,9 +80,7 @@ public class Arm extends Subsystem {
 
     public void setArmPosition(double armPosition) {
         this.armSetpoint = armPosition;
-        armTalon.set(ControlMode.Position, armPosition);
-        System.out.println("Arm.ControlMode = " + armTalon.getControlMode());
-        System.out.println("Arm.TargetPosition = " + armTalon.getClosedLoopTarget());
+        armTalon.set(ControlMode.Position, armSetpoint);
     }
 
     public double getArmPosition() {
@@ -139,6 +137,11 @@ public class Arm extends Subsystem {
     @Override
     public void periodic() {
         armPosition = potentiometer.get();
+        System.out.println("Arm.ControlMode = " + armTalon.getControlMode());
+        System.out.println("Arm.CurrentPosition = " + armTalon.getSelectedSensorPosition());
+        System.out.println("Arm.TargetPosition = " + armTalon.getClosedLoopTarget());
+        System.out.println("Arm.ClosedLoopError = " + armTalon.getClosedLoopError(0));
+        System.out.println("Arm.MotorOutput = " + armTalon.getMotorOutputPercent());
         BadLog.publish(Robot.LOG_ARM_POS, armPosition);
     }
 
