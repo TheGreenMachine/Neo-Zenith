@@ -71,9 +71,10 @@ public class Arm extends Subsystem {
         this.armTalon.configReverseSoftLimitEnable(true);
         this.armTalon.configForwardSoftLimitThreshold(FORWARD_SENSOR_LIMIT, kTimeoutMs);
         this.armTalon.configReverseSoftLimitThreshold(REVERSE_SENSOR_LIMIT, kTimeoutMs);
+        this.armTalon.set(ControlMode.PercentOutput, 0.0);
     }
 
-    public void setArm(double armSpeed){
+    public void setArm(double armSpeed) {
         this.armSpeed = armSpeed;
         isPercentOutput = true;
         outputsChanged = true;
@@ -132,21 +133,22 @@ public class Arm extends Subsystem {
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        builder.addDoubleProperty("Arm/PID/kF", this::getkF, null);
-        builder.addDoubleProperty("Arm/PID/kP", this::getkP, null);
-        builder.addDoubleProperty("Arm/PID/kI", this::getkI, null);
-        builder.addDoubleProperty("Arm/PID/kD", this::getkD, null);
-        builder.addStringProperty("Arm/ControlMode", () -> armTalon.getControlMode().toString(), null);
-        builder.addDoubleProperty("Arm/CurrentPosition", this::getArmPosition, null);
-        builder.addDoubleProperty("Arm/TargetPosition", () -> (
+        builder.addDoubleProperty("PID/kF", this::getkF, null);
+        builder.addDoubleProperty("PID/kP", this::getkP, null);
+        builder.addDoubleProperty("PID/kI", this::getkI, null);
+        builder.addDoubleProperty("PID/kD", this::getkD, null);
+        builder.addStringProperty("ControlMode", () -> armTalon.getControlMode().toString(), null);
+        builder.addDoubleProperty("CurrentPosition", this::getArmPosition, null);
+        builder.addDoubleProperty("ClosedLoop/TargetPosition", () -> (
                 armTalon.getControlMode() == ControlMode.Position
                         ? armTalon.getClosedLoopTarget() : 0
         ), null);
-        builder.addDoubleProperty("Arm/ClosedLoopError", () -> (
+        builder.addDoubleProperty("ClosedLoop/Error", () -> (
                 armTalon.getControlMode() == ControlMode.Position
                         ? armTalon.getClosedLoopError() : 0
         ), null);
-        builder.addDoubleProperty("Arm/MotorOutput", armTalon::getMotorOutputPercent, null);
+        builder.addDoubleProperty("MotorOutput", armTalon::getMotorOutputPercent, null);
+        builder.addBooleanProperty("Busy", this::isBusy, null);
     }
 
     @Override
