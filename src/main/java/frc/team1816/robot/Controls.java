@@ -8,6 +8,7 @@ import com.edinarobotics.utils.gamepad.gamepadfilters.GamepadFilterSet;
 import com.edinarobotics.utils.gamepad.gamepadfilters.PowerFilter;
 
 import frc.team1816.robot.commands.*;
+import frc.team1816.robot.subsystems.Arm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,9 @@ public class Controls {
 
         gamepadDriver.diamondUp().whenPressed(new ResetDriveEncodersCommand());
         gamepadDriver.diamondLeft().whenPressed(new ResetGyroCommand());
+        gamepadDriver.dPadLeft().whenPressed(new GamepadArmPositionCommand(Arm.REVERSE_SENSOR_LIMIT));
+        gamepadDriver.dPadRight().whenPressed(new GamepadArmPositionCommand(Arm.FORWARD_SENSOR_LIMIT));
+        gamepadDriver.diamondRight().whenPressed(new GamepadArmPositionCommand(1195)); // Midpoint
     }
 
     public static Controls getInstance(){

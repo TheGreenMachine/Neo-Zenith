@@ -12,8 +12,8 @@ import frc.team1816.robot.Robot;
 public class Arm extends Subsystem {
     private TalonSRX armTalon;
 
-    private static final int FORWARD_SENSOR_LIMIT = 1475;
-    private static final int REVERSE_SENSOR_LIMIT = 915;
+    public static final int FORWARD_SENSOR_LIMIT = 1475;
+    public static final int REVERSE_SENSOR_LIMIT = 915;
 
     private static final int kPIDLoopIdx = 0;
     private static final int kTimeoutMs = 30;

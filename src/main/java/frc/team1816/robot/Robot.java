@@ -7,13 +7,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import frc.team1816.robot.commands.DrivePathWeaverAuto;
-import frc.team1816.robot.commands.GamepadArmCommand;
-import frc.team1816.robot.commands.GamepadDriveCommand;
-import frc.team1816.robot.commands.GamepadIntakeCommand;
-import frc.team1816.robot.commands.GamepadShooterCommand;
+import frc.team1816.robot.commands.*;
 import frc.team1816.robot.subsystems.Arm;
 import frc.team1816.robot.subsystems.Drivetrain;
 import frc.team1816.robot.subsystems.Intake;
@@ -118,7 +113,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         drivetrain.setDefaultCommand(new GamepadDriveCommand());
-//        arm.setDefaultCommand(new GamepadArmCommand());
+        arm.setDefaultCommand(new GamepadArmCommand());
         intake.setDefaultCommand(new GamepadIntakeCommand());
         shooter.setDefaultCommand(new GamepadShooterCommand());
 
