@@ -128,12 +128,6 @@ public class Robot extends TimedRobot {
         double armIValue = table.getEntry("arm_kI").getDouble(arm.getkI());
         double armDValue = table.getEntry("arm_kD").getDouble(arm.getkD());
         arm.setPID(armPValue, armIValue, armDValue);
-
-        arm.setArmPosition(915);
-        Timer.delay(10);
-        arm.setArmPosition(1475);
-        Timer.delay(10);
-        arm.setArmPosition(1200);
     }
 
     @Override
