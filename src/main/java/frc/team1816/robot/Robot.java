@@ -65,7 +65,7 @@ public class Robot extends TimedRobot {
         // -- setup the log file
         log = BadLog.init(filename);
         BadLog.createValue("StartTime", timestr);
-        BadLog.createTopic("Time", "sec", () -> getElapsedTime(),
+        BadLog.createTopic("Time", "sec", Robot::getElapsedTime,
                 "xaxis", "hide");
 
         BadLog.createTopicSubscriber(LOG_ARM_POS, "ohms", DataInferMode.DEFAULT);
@@ -74,8 +74,7 @@ public class Robot extends TimedRobot {
         BadLog.createTopicSubscriber(LOG_GAMEPAD_RIGHT_POWER, "%", DataInferMode.DEFAULT);
         BadLog.createTopicSubscriber(LOG_GAMEPAD_VELOCITY_MODE, "T/F", DataInferMode.DEFAULT);
 
-        log.setDoubleToStringFunction( (d) -> String.format("%.3f", d) );
-
+        log.setDoubleToStringFunction((d) -> String.format("%.3f", d));
 
         Components.getInstance();
         Controls.getInstance();
