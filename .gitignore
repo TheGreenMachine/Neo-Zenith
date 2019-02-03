@@ -25,6 +25,7 @@ gradle-app.setting
 
 # User Specific Stuff
 .idea/
+*.iml
 
 # Why should I need to add this?
 .class

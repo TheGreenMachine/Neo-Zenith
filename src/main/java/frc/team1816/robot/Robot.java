@@ -6,13 +6,9 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import frc.team1816.robot.commands.DrivePathWeaverAuto;
-import frc.team1816.robot.commands.GamepadArmCommand;
-import frc.team1816.robot.commands.GamepadDriveCommand;
-import frc.team1816.robot.commands.GamepadIntakeCommand;
-import frc.team1816.robot.commands.GamepadShooterCommand;
+import frc.team1816.robot.commands.*;
 import frc.team1816.robot.subsystems.Arm;
 import frc.team1816.robot.subsystems.Drivetrain;
 import frc.team1816.robot.subsystems.Intake;
@@ -31,6 +27,7 @@ public class Robot extends TimedRobot {
     public static final String LOG_DRIVETRAIN_LEFT_ERROR = "Drivetrain/LeftError";
     public static final String LOG_DRIVETRAIN_RIGHT_ERROR = "Drivetrain/RightError";
     public static final String LOG_ARM_POS = "Arm/Position";
+    public static final String LOG_ARM_READING = "Arm/EncoderPosition";
     public static final String LOG_GAMEPAD_LEFT_POWER = "Gamepad/LeftPower";
     public static final String LOG_GAMEPAD_RIGHT_POWER = "Gamepad/RightPower";
     public static final String LOG_GAMEPAD_VELOCITY_MODE = "Gamepad/VelocityMode";
@@ -63,7 +60,7 @@ public class Robot extends TimedRobot {
         // -- setup the log file
         log = BadLog.init(filename);
         BadLog.createValue("StartTime", timestr);
-        BadLog.createTopic("Time", "sec", () -> getElapsedTime(),
+        BadLog.createTopic("Time", "sec", Robot::getElapsedTime,
                 "xaxis", "hide");
 
         BadLog.createTopicSubscriber(LOG_ARM_POS, "ohms", DataInferMode.DEFAULT);
@@ -72,8 +69,7 @@ public class Robot extends TimedRobot {
         BadLog.createTopicSubscriber(LOG_GAMEPAD_RIGHT_POWER, "%", DataInferMode.DEFAULT);
         BadLog.createTopicSubscriber(LOG_GAMEPAD_VELOCITY_MODE, "T/F", DataInferMode.DEFAULT);
 
-        log.setDoubleToStringFunction( (d) -> String.format("%.3f", d) );
-
+        log.setDoubleToStringFunction((d) -> String.format("%.3f", d));
 
         Components.getInstance();
         Controls.getInstance();
@@ -91,6 +87,11 @@ public class Robot extends TimedRobot {
         table.getEntry("kI").setDouble(drivetrain.kI);
         table.getEntry("kD").setDouble(drivetrain.kD);
         table.getEntry("kF").setDouble(drivetrain.kF);
+
+        table.getEntry("arm_kP").setDouble(arm.getkP());
+        table.getEntry("arm_kI").setDouble(arm.getkI());
+        table.getEntry("arm_kD").setDouble(arm.getkD());
+        table.getEntry("arm_kF").setDouble(arm.getkF());
 
         startTime = System.currentTimeMillis();
         log.finishInitialization();
@@ -123,6 +124,10 @@ public class Robot extends TimedRobot {
         double fValue = table.getEntry("kF").getDouble(drivetrain.kF);
         drivetrain.setPID(pValue, iValue, dValue, fValue);
 
+        double armPValue = table.getEntry("arm_kP").getDouble(arm.getkP());
+        double armIValue = table.getEntry("arm_kI").getDouble(arm.getkI());
+        double armDValue = table.getEntry("arm_kD").getDouble(arm.getkD());
+        arm.setPID(armPValue, armIValue, armDValue);
     }
 
     @Override
@@ -154,7 +159,6 @@ public class Robot extends TimedRobot {
         }
 
         System.out.println("Gyro Angle: " + drivetrain.getGyroAngle());
-        System.out.println("Potentiometer: " + arm.getArmPos());
         Scheduler.getInstance().run();
     }
 

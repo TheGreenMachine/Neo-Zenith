@@ -23,7 +23,6 @@ public class Components {
 
     //Arm and Intake
     private final int ARM_TALON = 4;
-    private final int ANALOG_POTENTIOMETER_ID = 0;
     private final int INTAKE_TALON = 8;
 
     //Shooter Constants
@@ -40,7 +39,7 @@ public class Components {
         this.drivetrain = new Drivetrain(LEFT_MAIN, LEFT_SLAVE_ONE, LEFT_SLAVE_TWO, RIGHT_MAIN, RIGHT_SLAVE_ONE,
                 RIGHT_SLAVE_TWO);
         this.shooter = new Shooter(PCM_ID, SOLENOID_ID_1, SOLENOID_ID_2);
-        this.arm = new Arm(ARM_TALON, ANALOG_POTENTIOMETER_ID);
+        this.arm = new Arm(ARM_TALON);
         this.intake = new Intake(INTAKE_TALON);
     }
 
