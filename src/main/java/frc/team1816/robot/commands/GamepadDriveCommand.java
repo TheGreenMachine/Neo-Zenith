@@ -36,23 +36,16 @@ public class GamepadDriveCommand extends Command {
         
         //System.out.println("Left Power: " + leftPower + " Right Power: " + rightPower);
 
-        BadLog.publish(Robot.LOG_GAMEPAD_LEFT_POWER, leftPower);
-        BadLog.publish(Robot.LOG_GAMEPAD_RIGHT_POWER, rightPower);
-
-        if (gamepad.leftTrigger().get()){
-            drivetrain.setDrivetrainPercentOutput(leftPower, rightPower);
-            System.out.println("Mode: PercentOutput");
-            BadLog.publish(Robot.LOG_GAMEPAD_VELOCITY_MODE, 0.0);
-        } else {
-            drivetrain.setDrivetrainVelocity(leftPower, rightPower);
-            System.err.println("Mode: Velocity");
-            BadLog.publish(Robot.LOG_GAMEPAD_VELOCITY_MODE, 1.0);
+        if (turn == 0) {
+            drivetrain.setDrivetrain(0.3 * leftPower, 0.3 * rightPower);
+        } else if (turn != 0) {
+            drivetrain.setDrivetrain(0.5 * leftPower, 0.5 * rightPower);
         }
     }
 
     @Override
     protected void end() {
-        this.drivetrain.setDrivetrainVelocity(0,0);
+        this.drivetrain.setDrivetrain(0,0);
     }
 
     @Override

@@ -45,7 +45,6 @@ public class Arm extends Subsystem {
         /* Set the quadrature (relative) sensor to match absolute */
         this.armTalon.setSelectedSensorPosition(absolutePosition, kPIDLoopIdx, kTimeoutMs);
         this.armPosition = getArmPositionAbsolute();
-        BadLog.createTopic(Robot.LOG_ARM_READING, "ticks", () -> (double) this.getArmPosition());
     }
 
     private void configureTalon() {
@@ -137,26 +136,6 @@ public class Arm extends Subsystem {
     }
 
     @Override
-    public void initSendable(SendableBuilder builder) {
-        builder.addDoubleProperty("PID/kF", this::getkF, null);
-        builder.addDoubleProperty("PID/kP", this::getkP, null);
-        builder.addDoubleProperty("PID/kI", this::getkI, null);
-        builder.addDoubleProperty("PID/kD", this::getkD, null);
-        builder.addStringProperty("ControlMode", () -> armTalon.getControlMode().toString(), null);
-        builder.addDoubleProperty("CurrentPosition", this::getArmPosition, null);
-        builder.addDoubleProperty("ClosedLoop/TargetPosition", () -> (
-                armTalon.getControlMode() == ControlMode.Position
-                        ? armTalon.getClosedLoopTarget() : 0
-        ), null);
-        builder.addDoubleProperty("ClosedLoop/Error", () -> (
-                armTalon.getControlMode() == ControlMode.Position
-                        ? armTalon.getClosedLoopError() : 0
-        ), null);
-        builder.addDoubleProperty("MotorOutput", armTalon::getMotorOutputPercent, null);
-        builder.addBooleanProperty("Busy", this::isBusy, null);
-    }
-
-    @Override
     public void periodic() {
         if (outputsChanged) {
             if (isPercentOutput) {
@@ -166,7 +145,6 @@ public class Arm extends Subsystem {
             }
             outputsChanged = false;
         }
-        BadLog.publish(Robot.LOG_ARM_POS, armPosition);
     }
 
     @Override

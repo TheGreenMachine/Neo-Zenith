@@ -25,9 +25,6 @@ public class Controls {
         GamepadFilterSet gamepadDriverFilterSet = new GamepadFilterSet(gamepadFilters);
 
         gamepadDriver = new FilteredGamepad(0,gamepadDriverFilterSet);
-
-        gamepadDriver.diamondUp().whenPressed(new ResetDriveEncodersCommand());
-        gamepadDriver.diamondLeft().whenPressed(new ResetGyroCommand());
     }
 
     public static Controls getInstance(){
