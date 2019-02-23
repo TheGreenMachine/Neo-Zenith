@@ -51,6 +51,7 @@ public class Drivetrain extends Subsystem {
     public void setDrivetrain(double leftPower, double rightPower){
         this.leftPower = leftPower;
         this.rightPower = rightPower;
+        update();
     }
 
     public double getLeftPower(){

@@ -12,8 +12,8 @@ import frc.team1816.robot.Robot;
 public class Arm extends Subsystem {
     private TalonSRX armTalon;
 
-    public static final int FORWARD_SENSOR_LIMIT = 1475;
-    public static final int REVERSE_SENSOR_LIMIT = 915;
+    public static final int FORWARD_SENSOR_LIMIT = 2590;
+    public static final int REVERSE_SENSOR_LIMIT = 1769;
     private static final int ALLOWABLE_CLOSED_LOOP_ERROR = 50;
 
     private static final int kPIDLoopIdx = 0;
@@ -74,6 +74,7 @@ public class Arm extends Subsystem {
     }
 
     public void setArm(double armSpeed) {
+        if(this.armSpeed == armSpeed) return;
         this.armSpeed = armSpeed;
         System.out.println("setArm called!");
         isPercentOutput = true;

@@ -29,10 +29,6 @@ public class GamepadArmCommand extends Command {
             this.arm.setArm(power);
         } else if (gamepad.dPadDown().get()){
             this.arm.setArm(-power);
-        } else if (gamepad.dPadLeft().get()) {
-            this.arm.setArmPosition(Arm.FORWARD_SENSOR_LIMIT);
-        } else if (gamepad.dPadRight().get()) {
-            this.arm.setArmPosition(Arm.REVERSE_SENSOR_LIMIT);
         } else {
             if (arm.isPercentOutput()) {
                 this.arm.setArm(0);
