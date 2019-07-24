@@ -1,10 +1,10 @@
 package frc.team1816.robot;
 
-import badlog.lib.BadLog;
-import badlog.lib.DataInferMode;
+
+import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -24,6 +24,29 @@ public class Robot extends TimedRobot {
     private Intake intake;
     private Shooter shooter;
 
+    private NetworkTableInstance inst;
+    private NetworkTable table;
+
+    public static RobotState stateInstance = new RobotState();
+
+    public static class RobotState {
+        public double width = 640;
+        public double height = 480;
+        public double xCoord = -1.0;
+
+        public double getVisionXCoord() {
+            return xCoord;
+        }
+
+        public double getVisionWidth() {
+            return width;
+        }
+
+        public double getVisionHeight() {
+            return height;
+        }
+    }
+
     @Override
     public void robotInit() {
         Components.getInstance();
@@ -33,6 +56,20 @@ public class Robot extends TimedRobot {
         arm = Components.getInstance().arm;
         intake = Components.getInstance().intake;
         shooter = Components.getInstance().shooter;
+
+        inst = NetworkTableInstance.getDefault();
+        table = inst.getTable("SmartDashboard");
+        NetworkTableEntry widthEntry = table.getEntry("width");
+        NetworkTableEntry heightEntry = table.getEntry("height");
+        NetworkTableEntry xCoordEntry = table.getEntry("center_x");
+
+        stateInstance.width = widthEntry.getDouble(640.0);
+        stateInstance.height = heightEntry.getDouble(480.0);
+        stateInstance.xCoord = xCoordEntry.getDouble(-1.0);
+
+        table.addEntryListener("center_x", (table, key, entry, value, flags) -> {stateInstance.xCoord = value.getDouble();}, 
+                EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+
     }
 
     @Override
