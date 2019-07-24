@@ -1,19 +1,21 @@
 package frc.team1816.robot;
 
+
 import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import frc.team1816.robot.commands.GamepadArmCommand;
-import frc.team1816.robot.commands.GamepadDriveCommand;
-import frc.team1816.robot.commands.GamepadIntakeCommand;
-import frc.team1816.robot.commands.GamepadShooterCommand;
+import frc.team1816.robot.commands.*;
 import frc.team1816.robot.subsystems.Arm;
 import frc.team1816.robot.subsystems.Drivetrain;
 import frc.team1816.robot.subsystems.Intake;
 import frc.team1816.robot.subsystems.Shooter;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Robot extends TimedRobot {
 
@@ -87,16 +89,14 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() { }
 
-
     @Override
     public void disabledPeriodic() { }
     
     @Override
-    public void autonomousPeriodic() { }
+    public void autonomousPeriodic() {}
 
     @Override
     public void teleopPeriodic() {
-        System.out.println("Potentiometer: " + arm.getArmPos());
         Scheduler.getInstance().run();
     }
 

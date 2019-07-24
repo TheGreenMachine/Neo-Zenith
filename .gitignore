@@ -1,14 +1,15 @@
-/.gradle/
-.iws
-.iml
-.ipr
-/.classpath
-/.project
-/.settings/
-/build/
-/bin/
+.gradle/
+*.iws
+*.iml
+*.ipr
+.classpath
+.project
+.settings/
+build/
+bin/
+out/
 
-./.gradle
+.gradle/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -24,6 +25,7 @@ gradle-app.setting
 
 # User Specific Stuff
 .idea/
+*.iml
 
 # Why should I need to add this?
 .class

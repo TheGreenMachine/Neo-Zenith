@@ -8,6 +8,9 @@ import com.edinarobotics.utils.gamepad.gamepadfilters.GamepadFilterSet;
 import com.edinarobotics.utils.gamepad.gamepadfilters.PowerFilter;
 import frc.team1816.robot.commands.*;
 
+import frc.team1816.robot.commands.*;
+import frc.team1816.robot.subsystems.Arm;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +26,6 @@ public class Controls {
         GamepadFilterSet gamepadDriverFilterSet = new GamepadFilterSet(gamepadFilters);
 
         gamepadDriver = new FilteredGamepad(0,gamepadDriverFilterSet);
-
         gamepadDriver.diamondUp().whileHeld(new DriveToHatchCommand(0.30));
     }
 
