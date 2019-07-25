@@ -61,7 +61,7 @@ public class Robot extends TimedRobot {
 
         stateInstance.width = widthEntry.getDouble(640.0);
         stateInstance.height = heightEntry.getDouble(480.0);
-        stateInstance.xCoord = xCoordEntry.getDouble(-1.0);f
+        stateInstance.xCoord = xCoordEntry.getDouble(-1.0);
 
         table.addEntryListener("center_x", (table, key, entry, value, flags) -> {stateInstance.xCoord = value.getDouble();}, 
                 EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
