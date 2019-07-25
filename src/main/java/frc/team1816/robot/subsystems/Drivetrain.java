@@ -1,19 +1,12 @@
 package frc.team1816.robot.subsystems;
 
-import badlog.lib.BadLog;
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SendableBuilder;
-import frc.team1816.robot.Robot;
 
 public class Drivetrain extends Subsystem {
-    private PigeonIMU gyro;
-
     private TalonSRX leftMain, leftSlaveOne, leftSlaveTwo, rightMain, rightSlaveOne, rightSlaveTwo;
     public static final int kLongCANTimeoutMs = 100;
     public static final int kCANTimeoutMs = 10;
@@ -44,8 +37,6 @@ public class Drivetrain extends Subsystem {
         this.rightMain.setNeutralMode(NeutralMode.Brake);
         this.rightSlaveOne.setNeutralMode(NeutralMode.Brake);
         this.rightSlaveTwo.setNeutralMode(NeutralMode.Brake);
-
-        this.gyro = new PigeonIMU(this.leftSlaveTwo);
     }
 
     public void setDrivetrain(double leftPower, double rightPower){

@@ -1,22 +1,17 @@
 package frc.team1816.robot.commands;
 
-import badlog.lib.BadLog;
 import com.edinarobotics.utils.math.Math1816;
-import com.edinarobotics.utils.gamepad.Gamepad;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.team1816.robot.Components;
 import frc.team1816.robot.Controls;
-import frc.team1816.robot.Robot;
 import frc.team1816.robot.subsystems.Drivetrain;
 
 public class GamepadDriveCommand extends Command {
     private Drivetrain drivetrain;
-    private Gamepad gamepad;
 
     public GamepadDriveCommand(){
         super("gamepaddrivecommand");
         this.drivetrain = Components.getInstance().drivetrain;
-        this.gamepad = Controls.getInstance().gamepadDriver;
         requires(drivetrain);
     }
 

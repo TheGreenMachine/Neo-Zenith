@@ -6,16 +6,12 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.team1816.robot.commands.*;
 import frc.team1816.robot.subsystems.Arm;
 import frc.team1816.robot.subsystems.Drivetrain;
 import frc.team1816.robot.subsystems.Intake;
 import frc.team1816.robot.subsystems.Shooter;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Robot extends TimedRobot {
 
@@ -65,7 +61,7 @@ public class Robot extends TimedRobot {
 
         stateInstance.width = widthEntry.getDouble(640.0);
         stateInstance.height = heightEntry.getDouble(480.0);
-        stateInstance.xCoord = xCoordEntry.getDouble(-1.0);
+        stateInstance.xCoord = xCoordEntry.getDouble(-1.0);f
 
         table.addEntryListener("center_x", (table, key, entry, value, flags) -> {stateInstance.xCoord = value.getDouble();}, 
                 EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
