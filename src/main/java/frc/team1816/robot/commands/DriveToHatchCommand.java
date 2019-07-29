@@ -13,7 +13,7 @@ public class DriveToHatchCommand extends Command {
 
     private static final double kP = 0.0015;
     private static final double ERROR_THRESHOLD = 0;
-    private static final double ON_TARGET_THRESHOLD = 0;
+    private static final double ON_TARGET_THRESHOLD = 20;
 
     private double nominalPower;
     private double targetCenterX = 320.0;
@@ -56,11 +56,13 @@ public class DriveToHatchCommand extends Command {
 
       if (Math.abs(lateralError) >= ERROR_THRESHOLD) {
           if (lateralError < 0) { // target is right of center, so decrease right side (wrt cargo) vel
-              leftPow = leftPow - control; // drivetrain reversed, so apply control to other side
+              leftPow = control; // drivetrain reversed, so apply control to other side
               leftPow = Math1816.coerceValue(1.0, 0.0, leftPow);
+              rightPow = -leftPow;
           } else { // target is left of center, so decrease left side (wrt cargo) vel
-              rightPow = rightPow - control; // drivetrain reversed, so apply control to other side
+              rightPow = control; // drivetrain reversed, so apply control to other side
               rightPow = Math1816.coerceValue(1.0, 0.0, rightPow);
+              leftPow = -rightPow;
           }
       }
 
