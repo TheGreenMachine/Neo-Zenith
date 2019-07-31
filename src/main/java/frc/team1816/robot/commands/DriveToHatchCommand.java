@@ -57,11 +57,11 @@ public class DriveToHatchCommand extends Command {
       if (Math.abs(lateralError) >= ERROR_THRESHOLD) {
           if (lateralError < 0) { // target is right of center, so decrease right side (wrt cargo) vel
               leftPow = control; // drivetrain reversed, so apply control to other side
-              leftPow = Math1816.coerceValue(1.0, 0.0, leftPow);
+              leftPow = Math1816.coerceValue(1.0, 0.15, leftPow);
               rightPow = -leftPow;
           } else { // target is left of center, so decrease left side (wrt cargo) vel
               rightPow = control; // drivetrain reversed, so apply control to other side
-              rightPow = Math1816.coerceValue(1.0, 0.0, rightPow);
+              rightPow = Math1816.coerceValue(1.0, 0.15, rightPow);
               leftPow = -rightPow;
           }
       }
