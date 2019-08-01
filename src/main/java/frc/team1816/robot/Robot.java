@@ -29,9 +29,19 @@ public class Robot extends TimedRobot {
         public double width = 640;
         public double height = 480;
         public double xCoord = -1.0;
+        public double yCoord = -1.0;
+        public double targetHeight = -1.0;
 
         public double getVisionXCoord() {
             return xCoord;
+        }
+
+        public double getVisionYCoord() {
+            return yCoord;
+        }
+
+        public double getTargetHeight() {
+            return targetHeight;
         }
 
         public double getVisionWidth() {
@@ -63,7 +73,11 @@ public class Robot extends TimedRobot {
         stateInstance.height = heightEntry.getDouble(480.0);
         stateInstance.xCoord = xCoordEntry.getDouble(-1.0);
 
-        table.addEntryListener("center_x", (table, key, entry, value, flags) -> {stateInstance.xCoord = value.getDouble();}, 
+        table.addEntryListener("center_x", (table, key, entry, value, flags) -> stateInstance.xCoord = value.getDouble(),
+                EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+        table.addEntryListener("center_y", (table, key, entry, value, flags) -> stateInstance.yCoord = value.getDouble(),
+                EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+        table.addEntryListener("target_height", (table, key, entry, value, flags) -> stateInstance.targetHeight = value.getDouble(),
                 EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
 
     }
