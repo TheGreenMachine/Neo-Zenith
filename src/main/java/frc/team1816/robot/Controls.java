@@ -23,7 +23,7 @@ public class Controls {
         GamepadFilterSet gamepadDriverFilterSet = new GamepadFilterSet(gamepadFilters);
 
         gamepadDriver = new FilteredGamepad(0, gamepadDriverFilterSet);
-        gamepadDriver.diamondUp().whileHeld(new DriveToHatchCommand(0.30));
+        gamepadDriver.diamondUp().whileHeld(new DriveToHatchCommand(0.45));
     }
 
     public static Controls getInstance(){

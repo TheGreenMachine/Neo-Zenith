@@ -32,9 +32,9 @@ public class GamepadDriveCommand extends Command {
         //System.out.println("Left Power: " + leftPower + " Right Power: " + rightPower);
 
         if (turn == 0) {
-            drivetrain.setDrivetrain(0.3 * leftPower, 0.3 * rightPower);
+            drivetrain.setDrivetrain(0.3 * leftPower, 0.45 * rightPower);
         } else if (turn != 0) {
-            drivetrain.setDrivetrain(0.5 * leftPower, 0.5 * rightPower);
+            drivetrain.setDrivetrain(0.5 * leftPower, 0.6 * rightPower);
         }
     }
 
