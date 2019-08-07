@@ -96,12 +96,14 @@ public class DriveToHatchCommand extends Command {
                     targetHeight, yCoord, distanceInches, angle);
         }
 
-        if (yCoord > 0.0 && yLastCoord > 0.0 && (time - lastShootTime > 10000) && 100 < (yCoord - yLastCoord)) {
+        if (yCoord > 0.0 && yLastCoord > 0.0 && (time - lastShootTime > 10000) && 50 < (yCoord - yLastCoord)) {
             shooter.shoot();
             lastShootTime = time;
             System.out.printf("  Shooting: yCoord: %6.0f; lastY: %6.0f, \n", yCoord, yLastCoord);
         }
-        yLastCoord = yCoord;
+        if(yLastCoord == -1.0) {
+            yLastCoord = yCoord;
+        }
     }
 
     @Override
