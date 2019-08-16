@@ -10,7 +10,7 @@ public class Arm extends Subsystem {
     private TalonSRX armTalon;
 
     public static final int FORWARD_SENSOR_LIMIT = 2590;
-    public static final int REVERSE_SENSOR_LIMIT = 1769;
+    public static final int REVERSE_SENSOR_LIMIT = 1828;
     private static final int ALLOWABLE_CLOSED_LOOP_ERROR = 50;
 
     private static final int kPIDLoopIdx = 0;
