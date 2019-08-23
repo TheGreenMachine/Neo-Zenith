@@ -1,11 +1,13 @@
 package frc.team1816.robot;
 
+
+import edu.wpi.first.networktables.EntryListenerFlags;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import frc.team1816.robot.commands.GamepadArmCommand;
-import frc.team1816.robot.commands.GamepadDriveCommand;
-import frc.team1816.robot.commands.GamepadIntakeCommand;
-import frc.team1816.robot.commands.GamepadShooterCommand;
+import frc.team1816.robot.commands.*;
 import frc.team1816.robot.subsystems.Arm;
 import frc.team1816.robot.subsystems.Drivetrain;
 import frc.team1816.robot.subsystems.Intake;
@@ -18,6 +20,38 @@ public class Robot extends TimedRobot {
     private Intake intake;
     private Shooter shooter;
 
+    private NetworkTableInstance inst;
+    private NetworkTable table;
+
+    public static RobotState stateInstance = new RobotState();
+
+    public static class RobotState {
+        public double width = 640;
+        public double height = 480;
+        public double xCoord = -1.0;
+        public double yCoord = -1.0;
+        public double targetHeight = -1.0;
+
+        public double getVisionXCoord() {
+            return xCoord;
+        }
+
+        public double getVisionYCoord() {
+            return yCoord;
+        }
+
+        public double getTargetHeight() {
+            return targetHeight;
+        }
+
+        public double getVisionWidth() {
+            return width;
+        }
+
+        public double getVisionHeight() {
+            return height;
+        }
+    }
 
     @Override
     public void robotInit() {
@@ -28,6 +62,23 @@ public class Robot extends TimedRobot {
         arm = Components.getInstance().arm;
         intake = Components.getInstance().intake;
         shooter = Components.getInstance().shooter;
+
+        inst = NetworkTableInstance.getDefault();
+        table = inst.getTable("SmartDashboard");
+        NetworkTableEntry widthEntry = table.getEntry("width");
+        NetworkTableEntry heightEntry = table.getEntry("height");
+        NetworkTableEntry xCoordEntry = table.getEntry("center_x");
+
+        stateInstance.width = widthEntry.getDouble(640.0);
+        stateInstance.height = heightEntry.getDouble(480.0);
+        stateInstance.xCoord = xCoordEntry.getDouble(-1.0);
+
+        table.addEntryListener("center_x", (table, key, entry, value, flags) -> stateInstance.xCoord = value.getDouble(),
+                EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+        table.addEntryListener("center_y", (table, key, entry, value, flags) -> stateInstance.yCoord = value.getDouble(),
+                EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+        table.addEntryListener("target_height", (table, key, entry, value, flags) -> stateInstance.targetHeight = value.getDouble(),
+                EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
 
     }
 
@@ -48,16 +99,14 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() { }
 
-
     @Override
     public void disabledPeriodic() { }
     
     @Override
-    public void autonomousPeriodic() { }
+    public void autonomousPeriodic() {}
 
     @Override
     public void teleopPeriodic() {
-        System.out.println("Potentiometer: " + arm.getArmPos());
         Scheduler.getInstance().run();
     }
 

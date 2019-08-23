@@ -2,6 +2,7 @@ package com.edinarobotics.utils.gamepad;
 
 import com.edinarobotics.utils.gamepad.buttons.DPadButton;
 import com.edinarobotics.utils.math.Vector2;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -16,29 +17,59 @@ public class Gamepad {
     private Button middleLeft, middleRight;
     private Button leftJoystickButton, rightJoystickButton;
     private Button dPadLeft, dPadDown, dPadRight, dPadUp;
+    private boolean isEnabled = false;
 	
 	public Gamepad(int port) {
-		joystick = new Joystick(port);
+        String name = DriverStation.getInstance().getJoystickName(0);
+        joystick = new Joystick(port);
+        if (name == null || name.length() == 0) {
+            System.out.println(">>>>>>>>>>>>>>>>   GAMEPAD DISABLED -- NAME IS EMPTY <<<<<<<<<<<<<");
+            leftBumper = new DummyButton();
+            rightBumper = new DummyButton();
+            leftTrigger = new DummyButton();
+            rightTrigger = new DummyButton();
+            diamondLeft = new DummyButton();
+            diamondDown = new DummyButton();
+            diamondRight = new DummyButton();
+            diamondUp = new DummyButton();
+            middleLeft = new DummyButton();
+            middleRight = new DummyButton();
+            leftJoystickButton = new DummyButton();
+            rightJoystickButton = new DummyButton();
 
-		leftBumper = new JoystickButton(joystick, 5);
-		rightBumper = new JoystickButton(joystick, 6);
-        leftTrigger = new JoystickButton(joystick, 7);
-        rightTrigger = new JoystickButton(joystick, 8);
-        diamondLeft = new JoystickButton(joystick, 1);
-        diamondDown = new JoystickButton(joystick, 2);
-        diamondRight = new JoystickButton(joystick, 3);
-        diamondUp = new JoystickButton(joystick, 4);
-        middleLeft = new JoystickButton(joystick, 9);
-        middleRight = new JoystickButton(joystick, 10);
-        leftJoystickButton = new JoystickButton(joystick, 11);
-        rightJoystickButton = new JoystickButton(joystick, 12);
-		
-        dPadLeft = new DPadButton(this, DPadButton.DPadButtonType.LEFT);
-        dPadRight = new DPadButton(this, DPadButton.DPadButtonType.RIGHT);
-        dPadUp = new DPadButton(this, DPadButton.DPadButtonType.UP);
-        dPadDown = new DPadButton(this, DPadButton.DPadButtonType.DOWN);
+            dPadLeft = new DummyButton();
+            dPadRight = new DummyButton();
+            dPadUp = new DummyButton();
+            dPadDown = new DummyButton();
 
-	} 
+        } else {
+            System.out.printf(">>>> Using Joystick: %s; on port: %d\n", name, port);
+            leftBumper = new JoystickButton(joystick, 5);
+            rightBumper = new JoystickButton(joystick, 6);
+            leftTrigger = new JoystickButton(joystick, 7);
+            rightTrigger = new JoystickButton(joystick, 8);
+            diamondLeft = new JoystickButton(joystick, 1);
+            diamondDown = new JoystickButton(joystick, 2);
+            diamondRight = new JoystickButton(joystick, 3);
+            diamondUp = new JoystickButton(joystick, 4);
+            middleLeft = new JoystickButton(joystick, 9);
+            middleRight = new JoystickButton(joystick, 10);
+            leftJoystickButton = new JoystickButton(joystick, 11);
+            rightJoystickButton = new JoystickButton(joystick, 12);
+
+            dPadLeft = new DPadButton(this, DPadButton.DPadButtonType.LEFT);
+            dPadRight = new DPadButton(this, DPadButton.DPadButtonType.RIGHT);
+            dPadUp = new DPadButton(this, DPadButton.DPadButtonType.UP);
+            dPadDown = new DPadButton(this, DPadButton.DPadButtonType.DOWN);
+        }
+	}
+
+    class DummyButton extends Button {
+        @Override
+        public boolean get() {
+            return false;
+        }
+    }
 	
 	/**
      * Returns a Button object representing the left bumper of the gamepad. <br/>
