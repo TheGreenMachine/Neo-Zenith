@@ -5,6 +5,7 @@ import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.team1816.robot.commands.*;
@@ -14,7 +15,7 @@ import frc.team1816.robot.subsystems.Intake;
 import frc.team1816.robot.subsystems.Shooter;
 
 public class Robot extends TimedRobot {
-
+    private SerialPort serialPort;
     private Drivetrain drivetrain;
     private Arm arm;
     private Intake intake;
@@ -62,7 +63,7 @@ public class Robot extends TimedRobot {
         arm = Components.getInstance().arm;
         intake = Components.getInstance().intake;
         shooter = Components.getInstance().shooter;
-
+        serialPort=new SerialPort(115200,SerialPort.Port.kUSB2);
         inst = NetworkTableInstance.getDefault();
         table = inst.getTable("SmartDashboard");
         NetworkTableEntry widthEntry = table.getEntry("width");
@@ -108,6 +109,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+        System.out.println("Distance: "+serialPort.readString());
     }
 
     @Override
