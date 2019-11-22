@@ -5,6 +5,7 @@ import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -15,12 +16,12 @@ import frc.team1816.robot.subsystems.Intake;
 import frc.team1816.robot.subsystems.Shooter;
 
 public class Robot extends TimedRobot {
-    private SerialPort serialPort;
+//    private SerialPort serialPort;
     private Drivetrain drivetrain;
     private Arm arm;
     private Intake intake;
     private Shooter shooter;
-
+    public AnalogInput distance_input;
     private NetworkTableInstance inst;
     private NetworkTable table;
 
@@ -63,9 +64,10 @@ public class Robot extends TimedRobot {
         arm = Components.getInstance().arm;
         intake = Components.getInstance().intake;
         shooter = Components.getInstance().shooter;
-        serialPort=new SerialPort(115200,SerialPort.Port.kUSB2);
+//        serialPort=new SerialPort(115200,SerialPort.Port.kUSB2);
         inst = NetworkTableInstance.getDefault();
         table = inst.getTable("SmartDashboard");
+        distance_input=new AnalogInput(0);
         NetworkTableEntry widthEntry = table.getEntry("width");
         NetworkTableEntry heightEntry = table.getEntry("height");
         NetworkTableEntry xCoordEntry = table.getEntry("center_x");
@@ -109,7 +111,13 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-        System.out.println("Distance: "+serialPort.readString());
+        double distance=distance_input.getAverageVoltage();
+        String avdist=String.format("%5.3f",distance);
+        String dist=String.format("%5.3f",distance_input.getVoltage());
+        System.out.print("Average distance in voltage: "+avdist);
+        System.out.println(" Distance in voltage: "+avdist);
+
+//        System.out.println("Distance: "+serialPort.readString());
     }
 
     @Override
